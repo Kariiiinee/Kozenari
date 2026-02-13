@@ -66,11 +66,19 @@ export default async function handler(req: any, res: any) {
 
   const API_KEY = process.env.GOOGLE_API_KEY || '';
 
+  // Safe diagnostic logging for Vercel logs (not returned to user)
+  console.log('Kozendo API Diagnostic:', {
+    hasGoogleKey: !!process.env.GOOGLE_API_KEY,
+    googleKeyLength: process.env.GOOGLE_API_KEY?.length || 0,
+    nodeEnv: process.env.NODE_ENV,
+    allEnvKeys: Object.keys(process.env).filter(key => key.includes('API') || key.includes('KEY')).join(', ')
+  });
+
   if (!API_KEY) {
-    console.error('Kozendo API Error: GOOGLE_API_KEY is not defined.');
+    console.error('Kozendo API Error: GOOGLE_API_KEY is not defined in process.env');
     return res.status(500).json({
       error: 'AI Service configuration missing',
-      details: 'The GOOGLE_API_KEY environment variable is not set in the Vercel dashboard.'
+      details: 'The GOOGLE_API_KEY environment variable is not detected by the serverless function. Please ensure you have added it in Vercel -> Settings -> Environment Variables and triggered a RE-DEPLOY.'
     });
   }
 
