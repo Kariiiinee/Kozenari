@@ -22,6 +22,21 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         audioRef.current.addEventListener('play', handlePlay);
         audioRef.current.addEventListener('pause', handlePause);
 
+        // One-time interaction listener to handle browser autoplay policies
+        const handleFirstInteraction = () => {
+            if (audioRef.current) {
+                audioRef.current.play().then(() => {
+                    window.removeEventListener('click', handleFirstInteraction);
+                    window.removeEventListener('touchstart', handleFirstInteraction);
+                }).catch(err => {
+                    console.log("Play failed on interaction:", err);
+                });
+            }
+        };
+
+        window.addEventListener('click', handleFirstInteraction);
+        window.addEventListener('touchstart', handleFirstInteraction);
+
         return () => {
             if (audioRef.current) {
                 audioRef.current.pause();
@@ -29,6 +44,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 audioRef.current.removeEventListener('pause', handlePause);
                 audioRef.current = null;
             }
+            window.removeEventListener('click', handleFirstInteraction);
+            window.removeEventListener('touchstart', handleFirstInteraction);
         };
     }, []);
 
