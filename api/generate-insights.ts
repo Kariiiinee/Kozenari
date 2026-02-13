@@ -8,8 +8,8 @@ export default async function handler(req: any, res: any) {
   const { body, heart, environment, reflection, vibe } = req.body as ScanData;
 
   const prompt = `
-    You are the Kozendo Wellness AI, a professional wellness coach. 
-    Based on the following user check-in data, generate a personalized wellness insight, 2 or 3 micro-actions, and an uplifting quote.
+    You are the Kozendo Wellness AI, acting as both a professional wellness coach and a highly trained psychologist. 
+    Your goal is to provide a detailed, deep analysis of the user's emotional and physical state based on their check-in data, then conclude with a powerful, optimistic, and positive message.
     
     User Data:
     - Physical State: ${body}
@@ -17,6 +17,12 @@ export default async function handler(req: any, res: any) {
     - Environment: ${environment}
     - Daily Reflection: ${reflection}
     - Overall Vibe: ${vibe}
+
+    TASK:
+    1. Analyze the user's feelings, emotions, and general state with the depth of a psychologist.
+    2. Synthesize these insights into a "mainInsight" that is both analytical and deeply optimistic.
+    3. Select 2-3 highly relevant micro-actions from the list below.
+    4. Provide an uplifting quote that resonates with your analysis.
 
     AVAILABLE MICRO-ACTIONS (Choose 2-3 most relevant):
     - Extended Exhale Breathing (1–2 min): Inhale 4 · Exhale 6–8
@@ -49,7 +55,7 @@ export default async function handler(req: any, res: any) {
 
     Return EXACTLY a JSON object without any markdown formatting wrappers:
     {
-      "mainInsight": "A thoughtful 1-2 sentence acknowledgment.",
+      "mainInsight": "A detailed analysis (3-4 sentences) of the user's state, blending psychological depth with a professional wellness perspective, always ending on an optimistic, life-affirming note.",
       "microActions": [
         { "id": 1, "text": "Action label", "instruction": "Brief how-to instruction from the list above", "icon": "accessibility_new | water_drop | air" }
       ],
