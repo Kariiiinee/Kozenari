@@ -31,10 +31,17 @@ export const generateAIInsights = async (data: ScanData): Promise<AIInsight> => 
             return await response.json();
         }
 
+        const errorData = await response.json().catch(() => ({}));
+        console.error('AI API Error Details:', {
+            status: response.status,
+            statusText: response.statusText,
+            data: errorData
+        });
+
         // If response is not ok (e.g., 404, 500), throw to trigger fallback
-        throw new Error('API unavailable, falling back to simulation');
+        throw new Error(`API error ${response.status}: ${errorData.details || response.statusText}`);
     } catch (error) {
-        console.log('AI API not reachable, using local simulation:', error);
+        console.error('AI Service Connection Issue:', error);
 
         // LOCAL SIMULATION FALLBACK (Existing Logic)
         await new Promise(resolve => setTimeout(resolve, 2000));
