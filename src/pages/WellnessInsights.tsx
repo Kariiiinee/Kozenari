@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Sparkles, Brain, Accessibility, Droplets, Wind, Bookmark, ChevronLeft, Loader2 } from 'lucide-react';
+import { Sparkles, Brain, Accessibility, Droplets, Wind, Bookmark, ChevronLeft, Loader2, CheckCircle2 } from 'lucide-react';
 import Header from '../components/Header';
 import { generateAIInsights, AIInsight } from '../services/aiService';
+import { saveScanToHistory } from '../services/historyService';
 
 const WellnessInsights: React.FC = () => {
     const navigate = useNavigate();
@@ -11,6 +12,26 @@ const WellnessInsights: React.FC = () => {
 
     const [loading, setLoading] = React.useState(true);
     const [insight, setInsight] = React.useState<AIInsight | null>(null);
+    const [activeActionId, setActiveActionId] = React.useState<number | null>(null);
+    const [isSaved, setIsSaved] = React.useState(false);
+
+    const handleSaveToHistory = () => {
+        if (!scanData || !insight) return;
+
+        saveScanToHistory({
+            vibe: scanData.vibe,
+            body: scanData.body,
+            heart: scanData.heart,
+            environment: scanData.environment,
+            reflection: scanData.reflection,
+            insight: insight.mainInsight
+        });
+
+        setIsSaved(true);
+        setTimeout(() => {
+            navigate('/history');
+        }, 1500);
+    };
 
     React.useEffect(() => {
         const fetchInsights = async () => {
@@ -121,45 +142,42 @@ const WellnessInsights: React.FC = () => {
                         <div className="space-y-3 mb-8">
                             <h3 className="text-[10px] font-bold uppercase tracking-widest text-[#13ec13] mb-2">Micro-Actions</h3>
                             {insight.microActions.map(action => (
-                                <div key={action.id} className="flex items-center gap-4 bg-white/50 p-3.5 rounded-xl border border-white shadow-sm transition-all hover:bg-white active:scale-98">
-                                    <div className="w-10 h-10 bg-[#13ec13]/10 rounded-lg flex items-center justify-center text-[#13ec13]">
-                                        {action.icon === 'accessibility_new' && <Accessibility className="w-5 h-5" />}
-                                        {action.icon === 'water_drop' && <Droplets className="w-5 h-5" />}
-                                        {action.icon === 'air' && <Wind className="w-5 h-5" />}
+                                <div
+                                    key={action.id}
+                                    onMouseEnter={() => setActiveActionId(action.id)}
+                                    onMouseLeave={() => setActiveActionId(null)}
+                                    onClick={() => setActiveActionId(activeActionId === action.id ? null : action.id)}
+                                    className={`relative flex flex-col gap-2 p-3.5 rounded-xl border transition-all duration-300 cursor-help ${activeActionId === action.id
+                                        ? 'bg-white border-[#13ec13]/30 shadow-md scale-[1.02]'
+                                        : 'bg-white/50 border-white shadow-sm hover:bg-white'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${activeActionId === action.id ? 'bg-[#13ec13] text-white shadow-inner' : 'bg-[#13ec13]/10 text-[#13ec13]'
+                                            }`}>
+                                            {action.icon === 'accessibility_new' && <Accessibility className="w-5 h-5" />}
+                                            {action.icon === 'water_drop' && <Droplets className="w-5 h-5" />}
+                                            {action.icon === 'air' && <Wind className="w-5 h-5" />}
+                                        </div>
+                                        <span className="font-bold text-sm text-slate-700">{action.text}</span>
                                     </div>
-                                    <span className="font-bold text-sm text-slate-700">{action.text}</span>
+
+                                    {/* Instruction Expansion */}
+                                    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeActionId === action.id ? 'max-h-24 opacity-100 pb-1' : 'max-h-0 opacity-0'
+                                        }`}>
+                                        <p className="text-xs text-slate-500 leading-relaxed pl-14 pt-1 animate-in fade-in slide-in-from-top-1">
+                                            {action.instruction}
+                                        </p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
 
                         {/* Uplifting Quote */}
                         <div className="border-t border-[#13ec13]/10 pt-6">
-                            <p className="italic text-center text-slate-500 font-medium text-sm">
+                            <p className="italic text-center text-slate-500 font-medium text-base px-2">
                                 "{insight.upliftingQuote}"
                             </p>
-                        </div>
-                    </div>
-
-                    {/* Recommended Activity Card */}
-                    <div className="rounded-[1.5rem] overflow-hidden relative h-48 mb-6 group cursor-pointer shadow-lg shadow-black/10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                        <img
-                            src={insight.recommendedActivity.image}
-                            alt="Wellness"
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <span className="text-white font-bold text-lg">{insight.recommendedActivity.title}</span>
-                                    <div className="flex items-center gap-2 opacity-80">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#13ec13]" />
-                                        <span className="text-white/90 text-xs font-semibold">{insight.recommendedActivity.duration}</span>
-                                    </div>
-                                </div>
-                                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-                                    <ChevronLeft className="w-6 h-6 text-white rotate-180" />
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -167,11 +185,24 @@ const WellnessInsights: React.FC = () => {
                 {/* Sticky Footer Actions */}
                 <div className="absolute bottom-0 left-0 w-full p-6 pb-12 bg-gradient-to-t from-white via-white to-transparent flex flex-col gap-3 z-20">
                     <button
-                        onClick={() => navigate('/stats')}
-                        className="w-full bg-[#13ec13] text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[#13ec13]/25 hover:opacity-95 active:scale-[0.98] transition-all"
+                        onClick={handleSaveToHistory}
+                        disabled={isSaved}
+                        className={`w-full font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all ${isSaved
+                            ? 'bg-slate-100 text-slate-400 cursor-default shadow-none'
+                            : 'bg-[#13ec13] text-slate-900 shadow-[#13ec13]/25 hover:opacity-95 active:scale-[0.98]'
+                            }`}
                     >
-                        <Bookmark className="w-5 h-5" />
-                        Save to History
+                        {isSaved ? (
+                            <>
+                                <CheckCircle2 className="w-5 h-5 text-[#13ec13]" />
+                                Saved to History
+                            </>
+                        ) : (
+                            <>
+                                <Bookmark className="w-5 h-5" />
+                                Save to History
+                            </>
+                        )}
                     </button>
                 </div>
             </main>

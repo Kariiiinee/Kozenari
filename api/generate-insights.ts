@@ -1,6 +1,5 @@
-import { ScanData, AIInsight } from '../src/services/aiService';
+import { ScanData } from '../src/services/aiService';
 
-// This is a Vercel Serverless Function template for Claude integration
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
@@ -20,7 +19,6 @@ export default async function handler(req: any, res: any) {
     - Overall Vibe: ${vibe}
 
     AVAILABLE MICRO-ACTIONS (Choose 2-3 most relevant):
-    [LOWER CORTISOL - Stress/Anxiety/Tension]
     - Extended Exhale Breathing (1–2 min): Inhale 4 · Exhale 6–8
     - Unclench Check (30 sec): Relax jaw, shoulders, hands, belly
     - Orient to Safety (1 min): Name 3 neutral/pleasant things nearby
@@ -28,8 +26,6 @@ export default async function handler(req: any, res: any) {
     - Warm Sensation (2 min): Hold a warm mug/hands on chest
     - Label the Feeling (30 sec): "Right now, I feel ___, and I’m okay."
     - Lower the Pace (1 min): Intentionally slow next movement
-
-    [FEEL ENERGIZED - Fatigue/Lethargy/Morning]
     - Light Exposure Reset (2 min): Step outside or near a window
     - Power Stretch (1 min): Reach up, open chest
     - Cold Water Splash (30 sec): Face or wrists with cool water
@@ -37,8 +33,6 @@ export default async function handler(req: any, res: any) {
     - Move One Joint (1 min): Rotate ankles, wrists, shoulders
     - Hydration Pause (1 min): Drink water slowly
     - Music Micro-Boost (2 min): Play one uplifting song
-
-    [BE MOTIVATED - Procrastination/Stuck]
     - Define Tiny Step (30 sec): Make it almost too easy
     - 2-Minute Rule: Start for just two minutes
     - Visual Finish (1 min): Picture the task done
@@ -46,8 +40,6 @@ export default async function handler(req: any, res: any) {
     - Speak It Aloud (30 sec): "I’m starting now."
     - Remove One Obstacle (1 min): Close one tab, clear one item
     - Celebrate Starting (10 sec): Acknowledge effort
-
-    [HELP TO SLEEP - Night/Restless]
     - Physiological Sigh (1 min): Two short inhales, long exhale
     - Dim Environment (2 min): Lower lights
     - Body Scan Lite (2 min): Relax forehead to legs
@@ -55,46 +47,67 @@ export default async function handler(req: any, res: any) {
     - Slow Counting Breaths (2 min): Count exhales 10 to 1
     - Gentle Self-Touch (1 min): Hand on chest or belly
 
-    Return EXACTLY a JSON object:
+    Return EXACTLY a JSON object without any markdown formatting wrappers:
     {
       "mainInsight": "A thoughtful 1-2 sentence acknowledgment.",
       "microActions": [
-        { "id": 1, "text": "Action label", "icon": "accessibility_new | water_drop | air" }
+        { "id": 1, "text": "Action label", "instruction": "Brief how-to instruction from the list above", "icon": "accessibility_new | water_drop | air" }
       ],
-      "upliftingQuote": "A short, relevant quote.",
-      "recommendedActivity": {
-        "title": "Activity name",
-        "duration": "Duration",
-        "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800"
-      }
+      "upliftingQuote": "A highly relevant quote from the official 365 library."
     }
-    
-    Choose actions that directly address the user's specific input.
   `;
 
+  const API_KEY = process.env.GOOGLE_API_KEY || '';
+  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch(GEMINI_URL, {
       method: 'POST',
       headers: {
-        'x-api-key': process.env.ANTHROPIC_API_KEY || '',
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 1024,
-        messages: [{ role: 'user', content: prompt }],
+        contents: [{
+          parts: [{ text: prompt }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024,
+          responseMimeType: "application/json",
+        }
       }),
     });
 
     const data = await response.json();
-    // Parse the Claude response content as JSON
-    const content = data.content[0].text;
-    const insights = JSON.parse(content);
+
+    if (!response.ok) {
+      console.error('Gemini API Error Response:', data);
+      return res.status(response.status).json({
+        error: 'Gemini API returned an error',
+        details: data.error?.message || 'Unknown error'
+      });
+    }
+
+    // Extract the text content from Gemini's response
+    const candidate = data.candidates?.[0];
+    const text = candidate?.content?.parts?.[0]?.text;
+
+    if (!text) {
+      console.error('Unexpected Gemini Response Structure:', data);
+      return res.status(500).json({ error: 'Invalid response from AI Service' });
+    }
+
+    // Parse the generated text into the structured JSON for the frontend
+    const insights = JSON.parse(text);
 
     return res.status(200).json(insights);
-  } catch (error) {
-    console.error('Claude API Error:', error);
-    return res.status(500).json({ error: 'Failed to generate insights' });
+  } catch (error: any) {
+    console.error('Kozendo AI Handler Error:', error);
+    return res.status(500).json({
+      error: 'Failed to generate insights',
+      message: error instanceof Error ? error.message : 'Unknown server error'
+    });
   }
 }

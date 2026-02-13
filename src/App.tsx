@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import WellnessScan from './pages/WellnessScan';
 import WellnessInsights from './pages/WellnessInsights';
-// import HealthStats from './pages/HealthStats';
+import WellnessHistory from './pages/WellnessHistory';
 
 import { AudioProvider } from './context/AudioContext';
 
@@ -14,7 +14,8 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/scan" element={<WellnessScan />} />
                     <Route path="/insights" element={<WellnessInsights />} />
-                    {/* <Route path="/stats" element={<HealthStats />} /> */}
+                    <Route path="/history" element={<WellnessHistory />} />
+                    <Route path="/stats" element={<WellnessHistory />} /> {/* Fallback/Legacy */}
                 </Routes>
             </Router>
         </AudioProvider>

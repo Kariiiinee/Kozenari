@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { X, Home, Activity, Sparkles, ChevronRight } from 'lucide-react';
+import { X, Home, Activity, Sparkles, ChevronRight, Calendar } from 'lucide-react';
 
 interface NavigationMenuProps {
     isOpen: boolean;
@@ -15,6 +15,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen, onClose }) => {
         { name: 'Home', path: '/', icon: <Home className="w-5 h-5" /> },
         { name: 'Daily Scan', path: '/scan', icon: <Activity className="w-5 h-5" /> },
         { name: 'AI Insights', path: '/insights', icon: <Sparkles className="w-5 h-5" /> },
+        { name: 'History', path: '/history', icon: <Calendar className="w-5 h-5" /> },
     ];
 
     if (!isOpen) return null;
