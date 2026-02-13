@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Brain, Accessibility, Droplets, Wind, Bookmark, Share2, ChevronLeft, MoreHorizontal } from 'lucide-react';
+import { Sparkles, Brain, Accessibility, Droplets, Wind, Bookmark, ChevronLeft } from 'lucide-react';
 import { mockData } from '../data/mockData';
-import BottomNav from '../components/BottomNav';
+import Header from '../components/Header';
 
 const WellnessInsights: React.FC = () => {
     const navigate = useNavigate();
@@ -23,19 +23,8 @@ const WellnessInsights: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Navigation */}
-                <nav className="flex items-center justify-between px-6 py-4 relative z-10">
-                    <button
-                        onClick={() => navigate('/scan')}
-                        className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-black/5"
-                    >
-                        <ChevronLeft className="w-6 h-6" />
-                    </button>
-                    <span className="font-bold text-lg tracking-tight">Kozendo</span>
-                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white/50 backdrop-blur-md shadow-sm border border-black/5">
-                        <MoreHorizontal className="w-6 h-6" />
-                    </button>
-                </nav>
+                {/* Header Navigation */}
+                <Header title="AI Insights" />
 
                 {/* Main Content Scroll Area */}
                 <div className="flex-1 overflow-y-auto px-6 pt-4 pb-32 relative z-10 no-scrollbar">
@@ -116,7 +105,7 @@ const WellnessInsights: React.FC = () => {
                 </div>
 
                 {/* Sticky Footer Actions */}
-                <div className="absolute bottom-36 left-0 w-full px-6 flex flex-col gap-3 z-20">
+                <div className="absolute bottom-0 left-0 w-full p-6 pb-12 bg-gradient-to-t from-white via-white to-transparent flex flex-col gap-3 z-20">
                     <button
                         onClick={() => navigate('/stats')}
                         className="w-full bg-[#13ec13] text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[#13ec13]/25 hover:opacity-95 active:scale-[0.98] transition-all"
@@ -125,8 +114,6 @@ const WellnessInsights: React.FC = () => {
                         Save to History
                     </button>
                 </div>
-
-                <BottomNav />
             </main>
         </div>
     );

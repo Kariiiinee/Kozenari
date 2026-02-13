@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Grid, BarChart2, Plus, FileText, Settings, Sparkles, Activity, Bed, Heart, Zap, ChevronRight } from 'lucide-react';
+import { Sparkles, Activity, Bed, Heart, Zap, ChevronRight } from 'lucide-react';
 import { mockData } from '../data/mockData';
-import BottomNav from '../components/BottomNav';
+import Header from '../components/Header';
 
 const HealthStats: React.FC = () => {
     const navigate = useNavigate();
@@ -22,23 +22,8 @@ const HealthStats: React.FC = () => {
                 {/* iOS Status Bar Spacer */}
                 <div className="h-12 w-full" />
 
-                {/* Top Navigation */}
-                <nav className="px-6 py-4 flex items-center justify-between sticky top-0 z-50 bg-[#f6f8f6]/80 backdrop-blur-md">
-                    <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-100">
-                        <Menu className="w-5 h-5 text-slate-600" />
-                    </button>
-                    <div className="text-center">
-                        <h1 className="text-lg font-extrabold tracking-tighter">KOZENDO</h1>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#13ec13] font-bold">Mindful Wellness</p>
-                    </div>
-                    <div className="relative">
-                        <img
-                            src={mockData.user.profileImage}
-                            alt="Profile"
-                            className="w-10 h-10 rounded-full border-2 border-[#13ec13] object-cover"
-                        />
-                    </div>
-                </nav>
+                {/* Header Navigation */}
+                <Header title="Health Stats" />
 
                 <div className="px-6 pb-40">
                     {/* Date Selector */}
@@ -191,7 +176,7 @@ const HealthStats: React.FC = () => {
                     </section>
                 </div>
 
-                <BottomNav />
+                <div className="h-8"></div>
             </main>
         </div>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Accessibility, Heart, Sun, Wind, FileEdit, Send } from 'lucide-react';
-import BottomNav from '../components/BottomNav';
+import { Accessibility, Heart, Sun, Wind, FileEdit, Send } from 'lucide-react';
+import Header from '../components/Header';
 
 const WellnessScan: React.FC = () => {
     const navigate = useNavigate();
@@ -19,13 +19,7 @@ const WellnessScan: React.FC = () => {
                 </div>
 
                 {/* Header Navigation */}
-                <header className="px-6 py-4 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-30">
-                    <button onClick={() => navigate('/')} className="text-slate-500">
-                        <X className="w-6 h-6" />
-                    </button>
-                    <h1 className="text-lg font-bold tracking-tight">Daily Scan</h1>
-                    <div className="w-6" />
-                </header>
+                <Header title="Daily Scan" />
 
                 {/* Progress Indicator */}
                 <div className="w-full px-6 mb-8">
@@ -152,7 +146,7 @@ const WellnessScan: React.FC = () => {
                 </main>
 
                 {/* Bottom Action Bar */}
-                <div className="fixed bottom-36 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 z-40">
+                <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] p-6 pb-12 bg-gradient-to-t from-white via-white to-transparent z-40">
                     <button
                         onClick={() => navigate('/insights')}
                         className="w-full bg-[#13ec13] hover:bg-[#13ec13]/90 text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-[#13ec13]/30 transition-all active:scale-95 flex items-center justify-center gap-2"
@@ -161,8 +155,6 @@ const WellnessScan: React.FC = () => {
                         <Send className="w-5 h-5" />
                     </button>
                 </div>
-
-                <BottomNav />
 
                 {/* Background Decoration */}
                 <div className="absolute top-20 -right-20 w-64 h-64 bg-[#13ec13]/5 rounded-full blur-3xl -z-10" />

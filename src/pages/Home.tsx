@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Flower, Menu, Pause, Volume2, ArrowUp } from 'lucide-react';
+import { Pause, Volume2, ArrowUp } from 'lucide-react';
 import { mockData } from '../data/mockData';
-import BottomNav from '../components/BottomNav';
+import Header from '../components/Header';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -21,17 +21,7 @@ const Home: React.FC = () => {
             </div>
 
             {/* Header */}
-            <header className="relative z-10 pt-11 px-6 pb-2 flex items-end justify-between">
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-[#13ec13] flex items-center justify-center shadow-lg">
-                        <Flower className="text-white w-5 h-5" />
-                    </div>
-                    <span className="text-white font-bold tracking-tight text-xl">KOZENDO</span>
-                </div>
-                <button className="p-2 text-white bg-white/10 rounded-full backdrop-blur-md">
-                    <Menu className="w-6 h-6" />
-                </button>
-            </header>
+            <Header transparent dark />
 
             {/* Main Content Area */}
             <div className="relative z-10 px-6 pt-12 flex flex-col h-[calc(100%-180px)]">
@@ -99,7 +89,8 @@ const Home: React.FC = () => {
                 {/* iOS Home Indicator Spacing */}
                 <div className="h-4"></div>
             </div>
-            <BottomNav />
+            {/* Bottom space for native feel */}
+            <div className="h-8"></div>
         </main>
     );
 };
