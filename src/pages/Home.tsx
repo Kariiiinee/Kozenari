@@ -7,6 +7,15 @@ import Header from '../components/Header';
 const Home: React.FC = () => {
     const navigate = useNavigate();
 
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good morning';
+        if (hour < 18) return 'Good afternoon';
+        return 'Good evening';
+    };
+
+    const greeting = getGreeting();
+
     return (
         <main className="relative h-screen w-full max-w-[430px] mx-auto overflow-hidden shadow-2xl font-sans bg-[#f6f8f6]">
             {/* Background Image */}
@@ -29,8 +38,8 @@ const Home: React.FC = () => {
                 <section className="mb-12">
                     <p className="text-[#13ec13] font-semibold tracking-wide uppercase text-xs mb-1">Morning Ritual</p>
                     <h1 className="text-4xl text-white font-light leading-tight">
-                        Good morning,<br />
-                        <span className="font-bold">{mockData.user.name}.</span>
+                        {greeting},<br />
+                        {mockData.user.isMember && <span className="font-bold">{mockData.user.name}.</span>}
                     </h1>
                 </section>
 

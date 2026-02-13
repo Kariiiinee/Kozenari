@@ -1,6 +1,7 @@
 export const mockData = {
     user: {
         name: "Alex",
+        isMember: true,
         profileImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAz4lwUsWLcilafofHsd8nLsrMU_7E7rcXD39QLS1UHerTWNP5uAf5bnWjUXcOOujlZSmH8N0DYHD_djuC-gyKPnLk5bmWNHNDZwsG5f8L7Ii2fRBlQNLF-wgKqB8EdmOn-rRxbIqlWbQS-NDSogfO_n1JMR17Uu5CpxPcNZIt9VKFcrGuNk1ktUzXYWV6uKRa-WPB4dfmL4nIXqowkPOJ1xT1-01hCNVj95r0ZoqeWmaD5IH0LFECJt2DqJBzzfIZnNc8Hq85GQrxo"
     },
     home: {
