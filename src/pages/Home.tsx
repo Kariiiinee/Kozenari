@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Pause, Volume2, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import { mockData } from '../data/mockData';
 import Header from '../components/Header';
 
@@ -64,31 +64,7 @@ const Home: React.FC = () => {
                 </div>
             </div>
 
-            {/* Floating Audio Control Widget */}
-            <div className="absolute bottom-8 left-6 right-6 z-20">
-                <div className="bg-white/40 backdrop-blur-xl rounded-full px-5 py-3 flex items-center gap-4 border border-white/30">
-                    {/* Play Button */}
-                    <button className="w-10 h-10 bg-[#13ec13] rounded-full flex items-center justify-center text-white shadow-lg shadow-[#13ec13]/20">
-                        <Pause className="w-5 h-5 fill-current" />
-                    </button>
 
-                    {/* Audio Info */}
-                    <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-slate-900 truncate">{mockData.home.ambientSound}</p>
-                        <p className="text-[10px] text-slate-600 font-medium">Ambient Sound</p>
-                    </div>
-
-                    {/* Volume/Progress Slider Mockup */}
-                    <div className="flex items-center gap-3 w-24">
-                        <Volume2 className="text-slate-600 w-4 h-4" />
-                        <div className="flex-1 h-1 bg-[#13ec13]/20 rounded-full relative overflow-hidden">
-                            <div className="absolute left-0 top-0 h-full w-2/3 bg-[#13ec13] rounded-full"></div>
-                        </div>
-                    </div>
-                </div>
-                {/* iOS Home Indicator Spacing */}
-                <div className="h-4"></div>
-            </div>
             {/* Bottom space for native feel */}
             <div className="h-8"></div>
         </main>
