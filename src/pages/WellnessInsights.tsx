@@ -116,7 +116,7 @@ const WellnessInsights: React.FC = () => {
                 </div>
 
                 {/* Sticky Footer Actions */}
-                <div className="absolute bottom-28 left-0 w-full px-6 flex flex-col gap-3 z-20">
+                <div className="absolute bottom-36 left-0 w-full px-6 flex flex-col gap-3 z-20">
                     <button
                         onClick={() => navigate('/stats')}
                         className="w-full bg-[#13ec13] text-slate-900 font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[#13ec13]/25 hover:opacity-95 active:scale-[0.98] transition-all"

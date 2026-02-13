@@ -152,7 +152,7 @@ const WellnessScan: React.FC = () => {
                 </main>
 
                 {/* Bottom Action Bar */}
-                <div className="fixed bottom-28 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 z-40">
+                <div className="fixed bottom-36 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 z-40">
                     <button
                         onClick={() => navigate('/insights')}
                         className="w-full bg-[#13ec13] hover:bg-[#13ec13]/90 text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-[#13ec13]/30 transition-all active:scale-95 flex items-center justify-center gap-2"
