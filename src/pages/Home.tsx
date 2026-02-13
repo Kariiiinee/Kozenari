@@ -67,11 +67,11 @@ const Home: React.FC = () => {
 
                 {/* Daily Quote Card */}
                 <section
-                    className="mt-4 bg-white/40 backdrop-blur-xl p-8 rounded-[1.5rem] relative overflow-hidden border border-white/20 cursor-pointer transition-all active:scale-95 group"
+                    className="mt-4 bg-white/40 backdrop-blur-xl p-6 xs:p-8 rounded-[1.5rem] relative overflow-hidden border border-white/20 cursor-pointer transition-all active:scale-95 group flex flex-col justify-center min-h-[220px]"
                     onClick={() => navigate('/scan')}
                 >
                     {/* Theme Badge */}
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 mb-4 shrink-0">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#13ec13]" />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
                             {dailyQuote.theme}
@@ -81,16 +81,16 @@ const Home: React.FC = () => {
                         </span>
                     </div>
 
-                    <div className="relative z-10">
-                        <div className="mb-6">
-                            <Quote className="w-8 h-8 text-[#13ec13] opacity-20 mb-2" />
-                            <p className="font-serif text-2xl leading-tight italic text-slate-900 group-hover:text-[#13ec13] transition-colors">
+                    <div className="relative z-10 flex-1 flex flex-col justify-center">
+                        <div className="mb-4">
+                            <Quote className="w-6 h-6 xs:w-8 xs:h-8 text-[#13ec13] opacity-20 mb-1" />
+                            <p className="font-serif text-xl xs:text-2xl leading-tight italic text-slate-900 group-hover:text-[#13ec13] transition-colors">
                                 {dailyQuote.text}
                             </p>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <div className="h-[1px] w-8 bg-[#13ec13]/40"></div>
-                            <p className="text-sm font-semibold tracking-wider text-slate-700 uppercase">{dailyQuote.author}</p>
+                        <div className="flex items-center gap-2 xs:gap-3 shrink-0">
+                            <div className="h-[1px] w-6 xs:w-8 bg-[#13ec13]/40"></div>
+                            <p className="text-[10px] xs:text-sm font-semibold tracking-wider text-slate-700 uppercase">{dailyQuote.author}</p>
                         </div>
                     </div>
                 </section>
@@ -98,9 +98,9 @@ const Home: React.FC = () => {
                 {/* Swipe Up Hint */}
                 <div
                     className="mt-auto flex flex-col items-center gap-2 pb-8 opacity-60 cursor-pointer"
-                    onClick={() => navigate('/stats')}
+                    onClick={() => navigate('/scan')}
                 >
-                    <p className="text-[10px] font-bold tracking-[0.2em] text-white uppercase">Swipe up for insights</p>
+                    <p className="text-[10px] font-bold tracking-[0.2em] text-white uppercase">Swipe up to start ritual</p>
                     <ArrowUp className="text-white w-4 h-4 animate-bounce" />
                 </div>
             </div>
