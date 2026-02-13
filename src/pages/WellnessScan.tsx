@@ -100,13 +100,13 @@ const WellnessScan: React.FC = () => {
                                     </div>
                                     <div>
                                         <h3 className="font-bold">Deep Breath Action</h3>
-                                        <p className="text-xs text-slate-500">Select a technique</p>
+                                        <p className="text-xs text-slate-500">What action did you think of?</p>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <button className="py-3 px-4 rounded-xl border-2 border-[#13ec13] bg-[#13ec13]/5 text-sm font-bold text-slate-800 shadow-sm" type="button">Box Breathing</button>
-                                    <button className="py-3 px-4 rounded-xl border border-slate-100 bg-slate-50 text-sm font-semibold text-slate-500" type="button">4-7-8 Method</button>
-                                </div>
+                                <textarea
+                                    className="w-full bg-slate-50 border-none rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-slate-400 resize-none h-24"
+                                    placeholder="After my breath, I decided to..."
+                                ></textarea>
                             </div>
 
                             {/* Daily Reflection Section */}
