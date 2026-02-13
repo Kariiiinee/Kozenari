@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { X, Home, Activity, Sparkles, BarChart2, ChevronRight } from 'lucide-react';
+import { X, Home, Activity, Sparkles, ChevronRight } from 'lucide-react';
 
 interface NavigationMenuProps {
     isOpen: boolean;
@@ -15,7 +15,6 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen, onClose }) => {
         { name: 'Home', path: '/', icon: <Home className="w-5 h-5" /> },
         { name: 'Daily Scan', path: '/scan', icon: <Activity className="w-5 h-5" /> },
         { name: 'AI Insights', path: '/insights', icon: <Sparkles className="w-5 h-5" /> },
-        { name: 'Health Stats', path: '/stats', icon: <BarChart2 className="w-5 h-5" /> },
     ];
 
     if (!isOpen) return null;
@@ -51,8 +50,8 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen, onClose }) => {
                                     onClose();
                                 }}
                                 className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all active:scale-95 ${active
-                                        ? 'bg-[#13ec13] text-white shadow-lg shadow-[#13ec13]/20'
-                                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
+                                    ? 'bg-[#13ec13] text-white shadow-lg shadow-[#13ec13]/20'
+                                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100'
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
