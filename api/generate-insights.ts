@@ -58,6 +58,15 @@ export default async function handler(req: any, res: any) {
   `;
 
   const API_KEY = process.env.GOOGLE_API_KEY || '';
+
+  if (!API_KEY) {
+    console.error('Kozendo API Error: GOOGLE_API_KEY is not defined.');
+    return res.status(500).json({
+      error: 'AI Service configuration missing',
+      details: 'The GOOGLE_API_KEY environment variable is not set in the Vercel dashboard.'
+    });
+  }
+
   const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
   try {
