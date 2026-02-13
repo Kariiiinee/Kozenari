@@ -134,10 +134,10 @@ const WellnessScan: React.FC = () => {
                                 <div className="space-y-6">
                                     <div className="flex justify-between items-center bg-slate-50 p-4 xs:p-5 rounded-2xl shadow-inner overflow-x-auto gap-2 no-scrollbar">
                                         {[
-                                            { emoji: '�', label: 'Happy / Content', desc: 'Everyday joy, satisfaction, feeling "okay" with life.' },
-                                            { emoji: '�', label: 'Calm / Peaceful', desc: 'Relaxation, relief, mindfulness, emotional ease.' },
-                                            { emoji: '�', label: 'Neutral / Steady', desc: 'Neither good nor bad — just being.' },
-                                            { emoji: '�', label: 'Thoughtful / Uncertain', desc: 'Reflection, questioning, mild confusion or contemplation.' },
+                                            { emoji: '😊', label: 'Happy / Content', desc: 'Everyday joy, satisfaction, feeling "okay" with life.' },
+                                            { emoji: '😌', label: 'Calm / Peaceful', desc: 'Relaxation, relief, mindfulness, emotional ease.' },
+                                            { emoji: '😐', label: 'Neutral / Steady', desc: 'Neither good nor bad — just being.' },
+                                            { emoji: '🤔', label: 'Thoughtful / Uncertain', desc: 'Reflection, questioning, mild confusion or contemplation.' },
                                             { emoji: '😔', label: 'Sad / Low', desc: 'Disappointment, loneliness, emotional heaviness.' },
                                             { emoji: '😤', label: 'Stressed / Frustrated', desc: 'Pressure, irritation, feeling overwhelmed.' },
                                             { emoji: '✨', label: 'Hopeful / Inspired', desc: 'Optimism, motivation, belief that things can improve.' }
@@ -184,7 +184,7 @@ const WellnessScan: React.FC = () => {
                                                     </>
                                                 );
                                             }
-                                            return <p className="text-slate-300 text-xs italic italic">Tap an emoji to see how you feel</p>;
+                                            return <p className="text-slate-300 text-xs italic">Tap an emoji to see how you feel</p>;
                                         })()}
                                     </div>
                                 </div>
