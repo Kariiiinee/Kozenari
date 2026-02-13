@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, Quote } from 'lucide-react';
 import { mockData } from '../data/mockData';
 import Header from '../components/Header';
+import quotes from '../data/quotesData.json';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -15,6 +16,27 @@ const Home: React.FC = () => {
     };
 
     const greeting = getGreeting();
+
+    const getDayOfYear = () => {
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = (now as any) - (start as any);
+        const oneDay = 1000 * 60 * 60 * 24;
+        return Math.floor(diff / oneDay);
+    };
+
+    const dayOfYear = getDayOfYear();
+    const dailyQuote = quotes.find(q => q.day === ((dayOfYear - 1) % 365) + 1) || quotes[0];
+
+    const getThemeLabel = (theme: string) => {
+        switch (theme) {
+            case 'ZEN': return 'Presence • Stillness • Mindfulness';
+            case 'CALM': return 'Peace • Stress Relief • Gentleness';
+            case 'MOTIVATION': return 'Action • Courage • Purpose';
+            default: return theme;
+        }
+    };
+
 
     return (
         <main className="relative h-screen w-full max-w-[430px] mx-auto overflow-hidden shadow-2xl font-sans bg-[#f6f8f6]">
@@ -45,20 +67,30 @@ const Home: React.FC = () => {
 
                 {/* Daily Quote Card */}
                 <section
-                    className="mt-4 bg-white/40 backdrop-blur-xl p-8 rounded-[1rem] relative overflow-hidden border border-white/20 cursor-pointer transition-all active:scale-95"
+                    className="mt-4 bg-white/40 backdrop-blur-xl p-8 rounded-[1.5rem] relative overflow-hidden border border-white/20 cursor-pointer transition-all active:scale-95 group"
                     onClick={() => navigate('/scan')}
                 >
-                    {/* Decorative element */}
-                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                        <span className="text-6xl text-[#13ec13] font-serif">"</span>
+                    {/* Theme Badge */}
+                    <div className="flex items-center gap-2 mb-4">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#13ec13]" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                            {dailyQuote.theme}
+                        </span>
+                        <span className="text-[9px] font-bold text-slate-400 opacity-60">
+                            {getThemeLabel(dailyQuote.theme)}
+                        </span>
                     </div>
+
                     <div className="relative z-10">
-                        <p className="font-serif text-2xl leading-relaxed italic text-slate-900 mb-6">
-                            "{mockData.home.quote}"
-                        </p>
+                        <div className="mb-6">
+                            <Quote className="w-8 h-8 text-[#13ec13] opacity-20 mb-2" />
+                            <p className="font-serif text-2xl leading-tight italic text-slate-900 group-hover:text-[#13ec13] transition-colors">
+                                {dailyQuote.text}
+                            </p>
+                        </div>
                         <div className="flex items-center gap-3">
                             <div className="h-[1px] w-8 bg-[#13ec13]/40"></div>
-                            <p className="text-sm font-semibold tracking-wider text-slate-700 uppercase">{mockData.home.author}</p>
+                            <p className="text-sm font-semibold tracking-wider text-slate-700 uppercase">{dailyQuote.author}</p>
                         </div>
                     </div>
                 </section>
