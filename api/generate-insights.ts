@@ -74,8 +74,8 @@ export default async function handler(req: any, res: any) {
     });
   }
 
-  // Using gemini-3-flash: the 2026 stable standard for high-speed analysis
-  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-3-flash:generateContent`;
+  // Matching the exact endpoint from the verified working curl example
+  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent`;
 
   try {
     const response = await fetch(GEMINI_URL, {
