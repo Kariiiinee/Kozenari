@@ -1,17 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, TrendingUp, TrendingDown, Minus, Loader2 } from 'lucide-react';
 import Header from '../components/Header';
-import { getHistory, getVibeCounts, getVibeTrend, VIBE_MAP } from '../services/historyService';
+import { getHistory, calculateVibeCounts, calculateVibeTrend, VIBE_MAP, ScanHistoryItem } from '../services/historyService';
 
 const WellnessHistory: React.FC = () => {
     const navigate = useNavigate();
-    const history = getHistory();
-    const counts = getVibeCounts();
-    const trend = getVibeTrend();
+    const [history, setHistory] = useState<ScanHistoryItem[]>([]);
+    const [counts, setCounts] = useState<Record<string, number>>({});
+    const [trend, setTrend] = useState<string>('Stable');
+    const [loading, setLoading] = useState(true);
 
     // State for monthly navigation
     const [viewDate, setViewDate] = useState(new Date());
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await getHistory();
+                setHistory(data);
+                setCounts(calculateVibeCounts(data));
+                setTrend(calculateVibeTrend(data));
+            } catch (error) {
+                console.error('Failed to load history', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     const getVibeStyle = (vibe: string) => {
         switch (vibe) {
@@ -65,6 +83,17 @@ const WellnessHistory: React.FC = () => {
         setViewDate(new Date(viewYear, viewMonth + 1, 1));
     };
 
+    if (loading) {
+        return (
+            <div className="bg-[#f6f8f6] font-sans text-slate-800 min-h-screen flex justify-center items-center">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="w-8 h-8 text-[#13ec13] animate-spin" />
+                    <p className="text-sm text-slate-400 font-bold tracking-wide">Loading History...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-[#f6f8f6] font-sans text-slate-800 min-h-screen flex justify-center">
             <main className="w-full max-w-[430px] bg-[#f6f8f6] min-h-screen relative shadow-2xl overflow-y-auto no-scrollbar pb-32">
@@ -94,8 +123,6 @@ const WellnessHistory: React.FC = () => {
                             })}
                         </div>
                     </section>
-
-                    {/* ... (Trend Indicator) */}
 
                     {/* Monthly Calendar View */}
                     <section className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-50 mb-6">
@@ -167,7 +194,7 @@ const WellnessHistory: React.FC = () => {
                         <h2 className="text-xl font-extrabold tracking-tight mb-4 px-2">Detailed Logs</h2>
                         <div className="space-y-4">
                             {history.length > 0 ? (
-                                history.slice().reverse().map((item) => (
+                                history.slice().map((item) => (
                                     <div key={item.id} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-50 flex items-center justify-between group hover:border-[#13ec13]/20 transition-all cursor-pointer">
                                         <div className="flex items-center gap-4">
                                             <div className="text-2xl w-12 h-12 bg-slate-50 rounded-[1.25rem] flex items-center justify-center shadow-inner group-hover:bg-white transition-colors">

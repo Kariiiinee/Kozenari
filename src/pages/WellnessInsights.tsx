@@ -15,10 +15,10 @@ const WellnessInsights: React.FC = () => {
     const [activeActionId, setActiveActionId] = React.useState<number | null>(null);
     const [isSaved, setIsSaved] = React.useState(false);
 
-    const handleSaveToHistory = () => {
+    const handleSaveToHistory = async () => {
         if (!scanData || !insight) return;
 
-        saveScanToHistory({
+        await saveScanToHistory({
             vibe: scanData.vibe,
             body: scanData.body,
             heart: scanData.heart,

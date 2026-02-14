@@ -7,9 +7,9 @@ export interface ScanHistoryItem {
     environment: string;
     reflection: string;
     insight: string;
+    breathAction?: string; // Added optional field
+    microActions?: any[]; // Added optional field
 }
-
-const HISTORY_KEY = 'kozendo_wellness_history';
 
 export const VIBE_MAP: Record<string, string> = {
     'Hopeful / Inspired': '✨',
@@ -21,25 +21,49 @@ export const VIBE_MAP: Record<string, string> = {
     'Stressed / Frustrated': '😤'
 };
 
-export const saveScanToHistory = (scan: Omit<ScanHistoryItem, 'id' | 'date'>): void => {
-    const history = getHistory();
-    const newItem: ScanHistoryItem = {
-        ...scan,
-        id: Math.random().toString(36).substr(2, 9),
-        date: new Date().toISOString(),
-    };
-
-    history.push(newItem);
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+// Simple User ID management for now
+export const getUserId = () => {
+    let userId = localStorage.getItem('kozendo_user_id');
+    if (!userId) {
+        userId = Math.random().toString(36).substring(2, 15);
+        localStorage.setItem('kozendo_user_id', userId);
+    }
+    return userId;
 };
 
-export const getHistory = (): ScanHistoryItem[] => {
-    const data = localStorage.getItem(HISTORY_KEY);
-    return data ? JSON.parse(data) : [];
+export const saveScanToHistory = async (scan: Omit<ScanHistoryItem, 'id' | 'date'>): Promise<void> => {
+    const userId = getUserId();
+
+    try {
+        await fetch('/api/history/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...scan, userId })
+        });
+    } catch (error) {
+        console.error('Failed to save scan:', error);
+        // Fallback or offline queue could go here
+    }
 };
 
-export const getVibeCounts = () => {
-    const history = getHistory();
+export const getHistory = async (): Promise<ScanHistoryItem[]> => {
+    const userId = getUserId();
+
+    try {
+        const response = await fetch(`/api/history/get?userId=${userId}`);
+        if (response.ok) {
+            const data = await response.json();
+            return data.scans || [];
+        }
+        return [];
+    } catch (error) {
+        console.error('Failed to fetch history:', error);
+        return [];
+    }
+};
+
+// Helper to calculate counts from a provided history array (synchronous)
+export const calculateVibeCounts = (history: ScanHistoryItem[]) => {
     const counts: Record<string, number> = {};
 
     // Initialize all with 0
@@ -56,12 +80,12 @@ export const getVibeCounts = () => {
     return counts;
 };
 
-export const getVibeTrend = () => {
-    const history = getHistory();
+// Helper to calculate trend from a provided history array (synchronous)
+export const calculateVibeTrend = (history: ScanHistoryItem[]) => {
     if (history.length < 2) return 'Stable';
 
-    const last = history[history.length - 1].vibe;
-    const prev = history[history.length - 2].vibe;
+    const last = history[0].vibe; // Most recent is first in the API response usually
+    const prev = history[1].vibe;
 
     if (last === prev) return 'Same as yesterday';
 
