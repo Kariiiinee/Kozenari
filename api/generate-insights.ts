@@ -77,59 +77,81 @@ export default async function handler(req: any, res: any) {
   // Matching the exact endpoint from the verified working curl example
   const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent`;
 
-  try {
-    const response = await fetch(GEMINI_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': API_KEY // Use both query param and header for maximum compatibility
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }],
-        generationConfig: {
-          temperature: 0.7
-        }
-      }),
-    });
+  const requestBody = JSON.stringify({
+    contents: [{
+      parts: [{ text: prompt }]
+    }],
+    generationConfig: {
+      temperature: 0.7
+    }
+  });
 
-    const data = await response.json();
+  // Retry logic for temporary 503 (high demand) errors
+  const MAX_RETRIES = 3;
+  let lastError: any = null;
 
-    if (!response.ok) {
-      console.error('Gemini API Error Response:', data);
-      return res.status(response.status).json({
-        error: 'Gemini API returned an error',
-        details: data.error?.message || 'Unknown error'
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    try {
+      if (attempt > 0) {
+        // Exponential backoff: 2s, 4s
+        await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
+      }
+
+      const response = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': API_KEY
+        },
+        body: requestBody,
       });
+
+      const data = await response.json();
+
+      if (response.status === 503 && attempt < MAX_RETRIES - 1) {
+        console.log(`Gemini 503 on attempt ${attempt + 1}, retrying...`);
+        lastError = data.error?.message || 'Service temporarily unavailable';
+        continue; // Retry
+      }
+
+      if (!response.ok) {
+        console.error('Gemini API Error Response:', data);
+        return res.status(response.status).json({
+          error: 'Gemini API returned an error',
+          details: data.error?.message || 'Unknown error'
+        });
+      }
+
+      // Extract the text content from Gemini's response
+      const candidate = data.candidates?.[0];
+      const rawText = candidate?.content?.parts?.[0]?.text;
+
+      if (!rawText) {
+        console.error('Unexpected Gemini Response Structure:', data);
+        return res.status(500).json({ error: 'Invalid response from AI Service' });
+      }
+
+      // Robust JSON Extraction: Clean any markdown code block wrappers
+      let cleanText = rawText.trim();
+      if (cleanText.startsWith('```json')) {
+        cleanText = cleanText.replace(/^```json/, '').replace(/```$/, '').trim();
+      } else if (cleanText.startsWith('```')) {
+        cleanText = cleanText.replace(/^```/, '').replace(/```$/, '').trim();
+      }
+
+      // Parse the generated text into the structured JSON for the frontend
+      const insights = JSON.parse(cleanText);
+
+      return res.status(200).json(insights);
+    } catch (error: any) {
+      console.error(`Kozendo AI Handler Error (attempt ${attempt + 1}):`, error);
+      lastError = error;
     }
-
-    // Extract the text content from Gemini's response
-    const candidate = data.candidates?.[0];
-    const rawText = candidate?.content?.parts?.[0]?.text;
-
-    if (!rawText) {
-      console.error('Unexpected Gemini Response Structure:', data);
-      return res.status(500).json({ error: 'Invalid response from AI Service' });
-    }
-
-    // Robust JSON Extraction: Clean any markdown code block wrappers
-    let cleanText = rawText.trim();
-    if (cleanText.startsWith('```json')) {
-      cleanText = cleanText.replace(/^```json/, '').replace(/```$/, '').trim();
-    } else if (cleanText.startsWith('```')) {
-      cleanText = cleanText.replace(/^```/, '').replace(/```$/, '').trim();
-    }
-
-    // Parse the generated text into the structured JSON for the frontend
-    const insights = JSON.parse(cleanText);
-
-    return res.status(200).json(insights);
-  } catch (error: any) {
-    console.error('Kozendo AI Handler Error:', error);
-    return res.status(500).json({
-      error: 'Failed to generate insights',
-      message: error instanceof Error ? error.message : 'Unknown server error'
-    });
   }
+
+  // All retries exhausted
+  return res.status(503).json({
+    error: 'AI Service temporarily unavailable',
+    details: 'The model is experiencing high demand. Please try again in a moment.'
+  });
 }
