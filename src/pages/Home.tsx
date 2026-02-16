@@ -16,6 +16,8 @@ const Home: React.FC = () => {
     };
 
     const greeting = getGreeting();
+    const isMorning = new Date().getHours() < 12;
+    const targetPath = isMorning ? '/morning-routine' : '/scan';
 
     const getDayOfYear = () => {
         const now = new Date();
@@ -44,11 +46,11 @@ const Home: React.FC = () => {
             <div className="absolute inset-0 z-0">
                 <img
                     src={mockData.home.backgroundImage}
-                    alt="Misty forest"
+                    alt="Morning sunrise"
                     className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/20" />
-                <div className="absolute inset-0 bg-gradient-to-b from-[#102210]/20 via-transparent to-[#102210]/30" />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#102210]/30 via-transparent to-[#102210]/40" />
             </div>
 
             {/* Header */}
@@ -58,7 +60,7 @@ const Home: React.FC = () => {
             <div className="relative z-10 px-6 pt-12 flex flex-col h-[calc(100%-180px)]">
                 {/* Greeting Section */}
                 <section className="mb-12">
-                    <p className="text-[#13ec13] font-semibold tracking-wide uppercase text-xs mb-1">Morning Ritual</p>
+                    <p className="text-[#13ec13] font-semibold tracking-wide uppercase text-xs mb-1">Daily Ritual</p>
                     <h1 className="text-4xl text-white font-light leading-tight">
                         {greeting},<br />
                         {mockData.user.isMember && <span className="font-bold">{mockData.user.name}.</span>}
@@ -67,16 +69,16 @@ const Home: React.FC = () => {
 
                 {/* Daily Quote Card */}
                 <section
-                    className="mt-4 bg-white/40 backdrop-blur-xl p-6 xs:p-8 rounded-[1.5rem] relative overflow-hidden border border-white/20 cursor-pointer transition-all active:scale-95 group flex flex-col justify-center min-h-[220px]"
-                    onClick={() => navigate('/scan')}
+                    className="mt-4 bg-white/10 backdrop-blur-md p-6 xs:p-8 rounded-[2rem] relative overflow-hidden border border-white/20 cursor-pointer transition-all active:scale-95 group flex flex-col justify-center min-h-[220px] animate-in zoom-in-95 duration-700"
+                    onClick={() => navigate(targetPath)}
                 >
                     {/* Theme Badge */}
                     <div className="flex items-center gap-2 mb-4 shrink-0">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#13ec13]" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#13ec13]/80">
                             {dailyQuote.theme}
                         </span>
-                        <span className="text-[9px] font-bold text-slate-400 opacity-60">
+                        <span className="text-[9px] font-bold text-white/40 opacity-60">
                             {getThemeLabel(dailyQuote.theme)}
                         </span>
                     </div>
@@ -84,13 +86,13 @@ const Home: React.FC = () => {
                     <div className="relative z-10 flex-1 flex flex-col justify-center">
                         <div className="mb-4">
                             <Quote className="w-6 h-6 xs:w-8 xs:h-8 text-[#13ec13] opacity-20 mb-1" />
-                            <p className="font-serif text-xl xs:text-2xl leading-tight italic text-slate-900 group-hover:text-[#13ec13] transition-colors">
+                            <p className="font-serif text-xl xs:text-2xl leading-tight italic text-white group-hover:text-[#13ec13] transition-colors">
                                 {dailyQuote.text}
                             </p>
                         </div>
                         <div className="flex items-center gap-2 xs:gap-3 shrink-0">
                             <div className="h-[1px] w-6 xs:w-8 bg-[#13ec13]/40"></div>
-                            <p className="text-[10px] xs:text-sm font-semibold tracking-wider text-slate-700 uppercase">{dailyQuote.author}</p>
+                            <p className="text-[10px] xs:text-sm font-semibold tracking-wider text-white/60 uppercase">{dailyQuote.author}</p>
                         </div>
                     </div>
                 </section>
@@ -98,7 +100,7 @@ const Home: React.FC = () => {
                 {/* Swipe Up Hint */}
                 <div
                     className="mt-auto flex flex-col items-center gap-2 pb-8 opacity-60 cursor-pointer"
-                    onClick={() => navigate('/scan')}
+                    onClick={() => navigate(targetPath)}
                 >
                     <p className="text-[10px] font-bold tracking-[0.2em] text-white uppercase">Swipe up to start ritual</p>
                     <ArrowUp className="text-white w-4 h-4 animate-bounce" />

@@ -24,7 +24,6 @@ const WellnessScan: React.FC = () => {
         // Comprehensive Validation
         if (!bodyScan.trim() || !heartScan.trim() || !envScan.trim() || !reflection.trim() || !selectedVibe) {
             setError('Please complete all sections to receive your personalized insight.');
-            // Scroll to top or error section
             window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
@@ -41,37 +40,47 @@ const WellnessScan: React.FC = () => {
             vibe: selectedVibe
         };
 
-        // Brief delay for UX feel
         setTimeout(() => {
             navigate('/insights', { state: { scanData } });
-        }, 300);
+        }, 1500);
     };
 
     return (
         <div className="bg-[#f6f8f6] font-sans text-slate-800 min-h-screen flex flex-col items-center">
-            <div className="w-full max-w-[430px] bg-white min-h-screen relative flex flex-col shadow-xl">
+            <div className="w-full max-w-[430px] bg-white min-h-screen relative flex flex-col shadow-xl overflow-hidden">
 
+                {/* Background Image with Overlay */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop"
+                        alt="Misty forest"
+                        className="w-full h-full object-cover brightness-[0.7]"
+                    />
+                    <div className="absolute inset-0 bg-black/40" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+                </div>
 
                 {/* Header Navigation */}
-                <Header title="Daily Scan" />
+                <Header title="KOZENDO" transparent dark />
 
                 {/* Progress Indicator */}
-                <div className="w-full px-6 mb-8">
-                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="w-full px-6 mb-8 relative z-10 pt-4">
+                    <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden backdrop-blur-md">
                         <div className="h-full bg-[#13ec13] w-2/3 transition-all duration-500 shadow-[0_0_10px_#13ec13]" />
                     </div>
                 </div>
 
                 {/* Main Content */}
-                <main className="flex-1 px-6 pb-32">
+                <main className="flex-1 px-6 pb-32 relative z-10 overflow-y-auto no-scrollbar">
                     <div className="space-y-10">
                         {/* Intro Text */}
-                        <section className="text-center space-y-2">
-                            <h2 className="text-2xl font-extrabold tracking-tight">Mindful Check-in</h2>
-                            <p className="text-slate-500 text-sm">Take a moment to listen to yourself.</p>
+                        <section className="text-center space-y-2 mb-4">
+                            <p className="text-[#13ec13] font-bold tracking-widest uppercase text-[10px] mb-1">Daily scan</p>
+                            <h2 className="text-3xl text-white font-light tracking-tight">Mindful <span className="font-bold">Check-in</span></h2>
+                            <p className="text-white/60 text-xs">Take a moment to listen to yourself.</p>
 
                             {error && (
-                                <div className="mt-4 p-3 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-sm font-medium animate-in slide-in-from-top-2 duration-300">
+                                <div className="mt-4 p-3 bg-rose-500/20 border border-rose-500/30 rounded-xl text-rose-200 text-xs font-medium animate-in slide-in-from-top-2 duration-300">
                                     {error}
                                 </div>
                             )}
@@ -79,18 +88,18 @@ const WellnessScan: React.FC = () => {
 
                         <form className="space-y-8" onSubmit={handleSubmit}>
                             {/* Body Scan Section */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
+                            <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 space-y-4">
+                                <div className="flex items-center gap-3 text-white">
                                     <div className="w-10 h-10 rounded-full bg-[#13ec13]/10 flex items-center justify-center text-[#13ec13]">
                                         <Accessibility className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold">Body Scan</h3>
-                                        <p className="text-xs text-slate-500">Physical sensations</p>
+                                        <h3 className="font-bold text-sm">Body Scan</h3>
+                                        <p className="text-[10px] text-white/40">Physical sensations, where do you feel tense?</p>
                                     </div>
                                 </div>
                                 <input
-                                    className="w-full bg-slate-50 border-none rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-slate-400"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm"
                                     placeholder="e.g., head, shoulder, back, legs, feet"
                                     type="text"
                                     value={bodyScan}
@@ -99,18 +108,18 @@ const WellnessScan: React.FC = () => {
                             </div>
 
                             {/* Heart Scan Section */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
+                            <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 space-y-4">
+                                <div className="flex items-center gap-3 text-white">
                                     <div className="w-10 h-10 rounded-full bg-[#13ec13]/10 flex items-center justify-center text-[#13ec13]">
                                         <Heart className="w-5 h-5 fill-[#13ec13]" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold">Heart Scan</h3>
-                                        <p className="text-xs text-slate-500">Emotional landscape</p>
+                                        <h3 className="font-bold text-sm">Heart Scan</h3>
+                                        <p className="text-[10px] text-white/40">Emotional landscape, how do you feel?</p>
                                     </div>
                                 </div>
                                 <input
-                                    className="w-full bg-slate-50 border-none rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-slate-400"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm"
                                     placeholder="e.g., calm, happy, sad, anxious, stressed"
                                     type="text"
                                     value={heartScan}
@@ -119,18 +128,18 @@ const WellnessScan: React.FC = () => {
                             </div>
 
                             {/* Environment Scan Section */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
+                            <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 space-y-4">
+                                <div className="flex items-center gap-3 text-white">
                                     <div className="w-10 h-10 rounded-full bg-[#13ec13]/10 flex items-center justify-center text-[#13ec13]">
                                         <Sun className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold">Environment Scan</h3>
-                                        <p className="text-xs text-slate-500">Your surroundings</p>
+                                        <h3 className="font-bold text-sm">Environment Scan</h3>
+                                        <p className="text-[10px] text-white/40">Your surrounding today?</p>
                                     </div>
                                 </div>
                                 <input
-                                    className="w-full bg-slate-50 border-none rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-slate-400"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm"
                                     placeholder="e.g., peaceful, cluttered, noisy, work, home"
                                     type="text"
                                     value={envScan}
@@ -139,18 +148,18 @@ const WellnessScan: React.FC = () => {
                             </div>
 
                             {/* Breath Action Section */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
+                            <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 space-y-4">
+                                <div className="flex items-center gap-3 text-white">
                                     <div className="w-10 h-10 rounded-full bg-[#13ec13]/10 flex items-center justify-center text-[#13ec13]">
                                         <Wind className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold">Deep Breath Action</h3>
-                                        <p className="text-xs text-slate-500">What action did you think of?</p>
+                                        <h3 className="font-bold text-sm">Deep Breath Action</h3>
+                                        <p className="text-[10px] text-white/40">After a deep breath, what action did you think of?</p>
                                     </div>
                                 </div>
                                 <textarea
-                                    className="w-full bg-slate-50 border-none rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-slate-400 resize-none h-24"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm resize-none h-24"
                                     placeholder="After taking a deep breath, I thought of when I..."
                                     value={breathAction}
                                     onChange={(e) => setBreathAction(e.target.value)}
@@ -158,18 +167,18 @@ const WellnessScan: React.FC = () => {
                             </div>
 
                             {/* Daily Reflection Section */}
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
+                            <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 space-y-4">
+                                <div className="flex items-center gap-3 text-white">
                                     <div className="w-10 h-10 rounded-full bg-[#13ec13]/10 flex items-center justify-center text-[#13ec13]">
                                         <FileEdit className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold">Daily Reflection</h3>
-                                        <p className="text-xs text-slate-500">One sentence for today</p>
+                                        <h3 className="font-bold text-sm">Daily Reflection</h3>
+                                        <p className="text-[10px] text-white/40">Journaling:One sentence for today</p>
                                     </div>
                                 </div>
                                 <textarea
-                                    className="w-full bg-slate-50 border-none rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-slate-400 resize-none h-24"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm resize-none h-24"
                                     placeholder="Today I ..."
                                     value={reflection}
                                     onChange={(e) => setReflection(e.target.value)}
@@ -178,9 +187,9 @@ const WellnessScan: React.FC = () => {
 
                             {/* Vibe Selector */}
                             <div className="space-y-4 pb-8">
-                                <h3 className="font-bold text-center">Overall Vibe</h3>
+                                <h3 className="font-bold text-center text-white text-sm">Overall Vibe</h3>
                                 <div className="space-y-6">
-                                    <div className="flex justify-between items-center bg-slate-50 p-4 xs:p-5 rounded-2xl shadow-inner overflow-x-auto gap-2 no-scrollbar">
+                                    <div className="flex justify-between items-center bg-white/10 backdrop-blur-md p-4 xs:p-5 rounded-2xl border border-white/10 overflow-x-auto gap-4 no-scrollbar">
                                         {[
                                             { emoji: '✨', label: 'Hopeful / Inspired', desc: 'Optimism, motivation, belief that things can improve.' },
                                             { emoji: '😊', label: 'Happy / Content', desc: 'Everyday joy, satisfaction, feeling "okay" with life.' },
@@ -223,16 +232,16 @@ const WellnessScan: React.FC = () => {
                                             if (vibeInfo) {
                                                 return (
                                                     <>
-                                                        <p className="text-[#13ec13] font-bold text-sm uppercase tracking-wider mb-1">
+                                                        <p className="text-[#13ec13] font-bold text-xs uppercase tracking-wider mb-1">
                                                             {vibeInfo.label}
                                                         </p>
-                                                        <p className="text-slate-500 text-xs leading-relaxed">
+                                                        <p className="text-white/60 text-[10px] leading-relaxed">
                                                             {vibeInfo.desc}
                                                         </p>
                                                     </>
                                                 );
                                             }
-                                            return <p className="text-slate-300 text-xs italic">Tap an emoji to see how you feel</p>;
+                                            return <p className="text-white/30 text-[10px] italic">Tap an emoji to see how you feel</p>;
                                         })()}
                                     </div>
                                 </div>
@@ -242,20 +251,19 @@ const WellnessScan: React.FC = () => {
                 </main>
 
                 {/* Bottom Action Bar */}
-                <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 pb-6 pt-3 bg-gradient-to-t from-white via-white to-transparent z-40">
+                <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 pb-8 pt-4 bg-gradient-to-t from-black/20 to-transparent z-40">
                     <button
                         onClick={handleSubmit}
                         disabled={isSubmitting}
-                        className={`w-full ${isSubmitting ? 'bg-slate-300 pointer-events-none' : 'bg-[#13ec13] hover:bg-[#13ec13]/90'} text-slate-900 font-bold py-2.5 rounded-xl shadow-lg shadow-[#13ec13]/30 transition-all active:scale-95 flex items-center justify-center gap-2 text-sm`}
+                        className={`w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg ${isSubmitting
+                            ? 'bg-white/10 text-white/40 backdrop-blur-md border border-white/10 cursor-not-allowed'
+                            : 'bg-[#13ec13] text-slate-900 shadow-[#13ec13]/30'
+                            }`}
                     >
                         <span>{isSubmitting ? 'Processing Scan...' : 'Submit Scan'}</span>
                         <Send className={`w-4 h-4 ${isSubmitting ? 'animate-pulse' : ''}`} />
                     </button>
                 </div>
-
-                {/* Background Decoration */}
-                <div className="absolute top-20 -right-20 w-64 h-64 bg-[#13ec13]/5 rounded-full blur-3xl -z-10" />
-                <div className="absolute bottom-40 -left-20 w-48 h-48 bg-[#13ec13]/10 rounded-full blur-3xl -z-10" />
             </div>
         </div>
     );

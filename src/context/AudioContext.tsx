@@ -13,7 +13,11 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     useEffect(() => {
         // Initialize audio
-        audioRef.current = new Audio('/music/ForestRain3min.mp3');
+        const hour = new Date().getHours();
+        const isMorning = hour >= 5 && hour < 12; // 5 AM - 11:59 AM
+        const track = isMorning ? '/music/Morning_sound.mp3' : '/music/ForestRain3min.mp3';
+
+        audioRef.current = new Audio(track);
         audioRef.current.loop = true;
 
         const handlePlay = () => setIsPlaying(true);

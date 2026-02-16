@@ -1,107 +1,55 @@
-export interface ScanHistoryItem {
-    id: string;
-    date: string; // ISO string
-    vibe: string;
-    body: string;
-    heart: string;
-    environment: string;
-    reflection: string;
-    insight: string;
-    breathAction?: string; // Added optional field
-    microActions?: any[]; // Added optional field
-}
+import { db, ScanHistoryItem } from './db';
 
-export const VIBE_MAP: Record<string, string> = {
-    'Hopeful / Inspired': '✨',
-    'Happy / Content': '😊',
-    'Calm / Peaceful': '😌',
-    'Neutral / Steady': '😐',
-    'Thoughtful / Uncertain': '🤔',
-    'Sad / Low': '😔',
-    'Stressed / Frustrated': '😤'
-};
+const OLD_HISTORY_KEY = 'wellness_scan_history';
 
-// Simple User ID management for now
-export const getUserId = () => {
-    let userId = localStorage.getItem('kozendo_user_id');
-    if (!userId) {
-        userId = Math.random().toString(36).substring(2, 15);
-        localStorage.setItem('kozendo_user_id', userId);
-    }
-    return userId;
-};
+// Export the type so other files can reference it
+export type { ScanHistoryItem };
 
-export const saveScanToHistory = async (scan: Omit<ScanHistoryItem, 'id' | 'date'>): Promise<void> => {
-    const userId = getUserId();
+export const saveScanToHistory = async (data: Omit<ScanHistoryItem, 'id' | 'timestamp'>): Promise<ScanHistoryItem> => {
+    // Ensure migration happens if it hasn't already
+    await migrateFromLocalStorage();
 
-    try {
-        await fetch('/api/history/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...scan, userId })
-        });
-    } catch (error) {
-        console.error('Failed to save scan:', error);
-        // Fallback or offline queue could go here
-    }
-};
-
-export const getHistory = async (): Promise<ScanHistoryItem[]> => {
-    const userId = getUserId();
-
-    try {
-        const response = await fetch(`/api/history/get?userId=${userId}`);
-        if (response.ok) {
-            const data = await response.json();
-            return data.scans || [];
-        }
-        return [];
-    } catch (error) {
-        console.error('Failed to fetch history:', error);
-        return [];
-    }
-};
-
-// Helper to calculate counts from a provided history array (synchronous)
-export const calculateVibeCounts = (history: ScanHistoryItem[]) => {
-    const counts: Record<string, number> = {};
-
-    // Initialize all with 0
-    Object.keys(VIBE_MAP).forEach(vibe => {
-        counts[vibe] = 0;
-    });
-
-    history.forEach(item => {
-        if (counts[item.vibe] !== undefined) {
-            counts[item.vibe]++;
-        }
-    });
-
-    return counts;
-};
-
-// Helper to calculate trend from a provided history array (synchronous)
-export const calculateVibeTrend = (history: ScanHistoryItem[]) => {
-    if (history.length < 2) return 'Stable';
-
-    const last = history[0].vibe; // Most recent is first in the API response usually
-    const prev = history[1].vibe;
-
-    if (last === prev) return 'Same as yesterday';
-
-    const hierarchy: Record<string, number> = {
-        'Hopeful / Inspired': 4,
-        'Happy / Content': 3,
-        'Calm / Peaceful': 2,
-        'Neutral / Steady': 1,
-        'Thoughtful / Uncertain': 0,
-        'Sad / Low': -1,
-        'Stressed / Frustrated': -2
+    const newItem: ScanHistoryItem = {
+        ...data,
+        id: crypto.randomUUID(),
+        timestamp: Date.now()
     };
 
-    const lastVal = hierarchy[last] ?? 0;
-    const prevVal = hierarchy[prev] ?? 0;
+    await db.scans.add(newItem);
+    return newItem;
+};
 
-    if (lastVal > prevVal) return 'Improving vibe';
-    return 'Declining vibe';
+export const getScanHistory = async (): Promise<ScanHistoryItem[]> => {
+    // Ensure migration happens if it hasn't already
+    await migrateFromLocalStorage();
+
+    // Return scans sorted by timestamp descending (newest first)
+    return await db.scans.orderBy('timestamp').reverse().toArray();
+};
+
+export const clearHistory = async (): Promise<void> => {
+    await db.scans.clear();
+    localStorage.removeItem(OLD_HISTORY_KEY);
+};
+
+// Internal migration function
+const migrateFromLocalStorage = async () => {
+    // Check if we've already migrated (could use a flag, but checking empty DB + existing localstorage is a decent heuristic)
+    const count = await db.scans.count();
+    const stored = localStorage.getItem(OLD_HISTORY_KEY);
+
+    if (count === 0 && stored) {
+        try {
+            const oldData: ScanHistoryItem[] = JSON.parse(stored);
+            if (Array.isArray(oldData) && oldData.length > 0) {
+                console.log(`Migrating ${oldData.length} items from localStorage to IndexedDB...`);
+                await db.scans.bulkAdd(oldData);
+                // Optionally clear old storage, or leave it as backup for now?
+                // Let's keep it for safety until explicit clear, but the app won't read from it anymore.
+                // localStorage.removeItem(OLD_HISTORY_KEY); 
+            }
+        } catch (e) {
+            console.error('Failed to migrate history from localStorage', e);
+        }
+    }
 };
