@@ -17,9 +17,14 @@ const RedirectHandler: React.FC = () => {
 
         // If the user is logged in but has no profile data
         if (user && !profile) {
-            // Avoid infinite loops by checking the current path
-            if (location.pathname !== '/profile-creation' && location.pathname !== '/login') {
-                console.log('User authenticated but no profile found. Redirecting to profile creation...');
+            // Check if we already tried to redirect during this browser session
+            const hasAttemptedOnboarding = sessionStorage.getItem('onboarding_redirect_attempted');
+
+            // We only trigger the automatic redirect if they land on the home page
+            // and haven't been redirected yet in this session.
+            if (location.pathname === '/' && !hasAttemptedOnboarding) {
+                console.log('User authenticated, no profile. Triggering one-time onboarding redirect...');
+                sessionStorage.setItem('onboarding_redirect_attempted', 'true');
                 navigate('/profile-creation', { replace: true });
             }
         }
