@@ -21,7 +21,7 @@ const Login: React.FC = () => {
             const { error } = await supabase.auth.signInWithOtp({
                 email,
                 options: {
-                    emailRedirectTo: window.location.origin,
+                    emailRedirectTo: `${window.location.origin}/profile-creation`,
                 },
             });
 
