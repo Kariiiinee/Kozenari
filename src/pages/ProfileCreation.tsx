@@ -58,6 +58,7 @@ const ProfileCreation: React.FC = () => {
                 .from('profiles')
                 .select('display_name')
                 .eq('display_name', name)
+                .neq('id', user?.id) // Exclude current user from uniqueness check
                 .maybeSingle();
 
             if (error) throw error;

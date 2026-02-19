@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../services/supabase';
 
@@ -28,7 +28,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
 
+    const fetchInProgress = useRef<string | null>(null);
+
     const fetchProfile = async (userId: string) => {
+        if (fetchInProgress.current === userId) return;
+        fetchInProgress.current = userId;
+
         try {
             const { data, error } = await supabase
                 .from('profiles')
@@ -37,16 +42,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .single();
 
             if (error) {
-                if (error.code !== 'PGRST116') { // PGRST116 is code for 'no rows found'
+                if (error.code === 'PGRST116') {
+                    setProfile(null);
+                } else {
                     console.error('Error fetching profile:', error);
+                    // Don't set profile to null on random errors to avoid loops
                 }
-                setProfile(null);
             } else {
                 setProfile(data);
             }
         } catch (error) {
             console.error('Unexpected error fetching profile:', error);
-            setProfile(null);
+        } finally {
+            fetchInProgress.current = null;
         }
     };
 
