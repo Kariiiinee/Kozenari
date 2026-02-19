@@ -2,9 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Accessibility, Heart, Sun, Wind, FileEdit, Send } from 'lucide-react';
 import Header from '../components/Header';
+import BottomMenu from '../components/BottomMenu';
+import { useTranslation } from 'react-i18next';
+import { supabase } from '../services/supabase';
 
 const WellnessScan: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [hoveredVibe, setHoveredVibe] = React.useState<string | null>(null);
     const [selectedVibe, setSelectedVibe] = React.useState<string | null>(null);
 
@@ -18,12 +22,22 @@ const WellnessScan: React.FC = () => {
     const [error, setError] = React.useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+    const vibes = [
+        { id: 'hopeful', emoji: '✨' },
+        { id: 'happy', emoji: '😊' },
+        { id: 'calm', emoji: '😌' },
+        { id: 'neutral', emoji: '😐' },
+        { id: 'thoughtful', emoji: '🤔' },
+        { id: 'sad', emoji: '😔' },
+        { id: 'stressed', emoji: '😤' }
+    ];
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         // Comprehensive Validation
         if (!bodyScan.trim() || !heartScan.trim() || !envScan.trim() || !reflection.trim() || !selectedVibe) {
-            setError('Please complete all sections to receive your personalized insight.');
+            setError(t('scan.error_incomplete'));
             window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
@@ -37,12 +51,38 @@ const WellnessScan: React.FC = () => {
             environment: envScan,
             breathAction: breathAction,
             reflection: reflection,
-            vibe: selectedVibe
+            vibe: selectedVibe // this is the key like 'hopeful'
         };
 
-        setTimeout(() => {
-            navigate('/insights', { state: { scanData } });
-        }, 1500);
+        const saveToSupabase = async () => {
+            try {
+                const { data: { user: currentUser } } = await supabase.auth.getUser();
+                if (currentUser) {
+                    const { error } = await supabase.from('posts').insert({
+                        user_id: currentUser.id,
+                        vibe: selectedVibe,
+                        reflection: reflection,
+                        body: bodyScan,
+                        heart: heartScan,
+                        environment: envScan,
+                        breath_action: breathAction,
+                        created_at: new Date().toISOString()
+                    });
+                    if (error) console.error('Error saving scan to community:', error);
+                } else {
+                    // Store in a way that suggests we could have shared
+                    console.info('Guest user: Scan saved locally only.');
+                }
+            } catch (err) {
+                console.error('Unexpected error saving scan:', err);
+            }
+        };
+
+        saveToSupabase().finally(() => {
+            setTimeout(() => {
+                navigate('/insights', { state: { scanData } });
+            }, 1000);
+        });
     };
 
     return (
@@ -61,7 +101,7 @@ const WellnessScan: React.FC = () => {
                 </div>
 
                 {/* Header Navigation */}
-                <Header title="KOZENDO" transparent dark />
+                <Header title={t('common.app_name')} transparent dark />
 
                 {/* Progress Indicator */}
                 <div className="w-full px-6 mb-8 relative z-10 pt-4">
@@ -75,9 +115,11 @@ const WellnessScan: React.FC = () => {
                     <div className="space-y-10">
                         {/* Intro Text */}
                         <section className="text-center space-y-2 mb-4">
-                            <p className="text-[#13ec13] font-bold tracking-widest uppercase text-[10px] mb-1">Daily scan</p>
-                            <h2 className="text-3xl text-white font-light tracking-tight">Mindful <span className="font-bold">Check-in</span></h2>
-                            <p className="text-white/60 text-xs">Take a moment to listen to yourself.</p>
+                            <p className="text-[#13ec13] font-bold tracking-widest uppercase text-[10px] mb-1">{t('scan.daily_scan')}</p>
+                            <h2 className="text-3xl text-white font-light tracking-tight">
+                                {t('scan.title_main')} <span className="font-bold">{t('scan.title_sub')}</span>
+                            </h2>
+                            <p className="text-white/60 text-xs">{t('scan.subtitle')}</p>
 
                             {error && (
                                 <div className="mt-4 p-3 bg-rose-500/20 border border-rose-500/30 rounded-xl text-rose-200 text-xs font-medium animate-in slide-in-from-top-2 duration-300">
@@ -94,13 +136,13 @@ const WellnessScan: React.FC = () => {
                                         <Accessibility className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-sm">Body Scan</h3>
-                                        <p className="text-[10px] text-white/40">Physical sensations, where do you feel tense?</p>
+                                        <h3 className="font-bold text-sm">{t('scan.sections.body.title')}</h3>
+                                        <p className="text-[10px] text-white/40">{t('scan.sections.body.description')}</p>
                                     </div>
                                 </div>
                                 <input
                                     className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm"
-                                    placeholder="e.g., head, shoulder, back, legs, feet"
+                                    placeholder={t('scan.sections.body.placeholder')}
                                     type="text"
                                     value={bodyScan}
                                     onChange={(e) => setBodyScan(e.target.value)}
@@ -114,13 +156,13 @@ const WellnessScan: React.FC = () => {
                                         <Heart className="w-5 h-5 fill-[#13ec13]" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-sm">Heart Scan</h3>
-                                        <p className="text-[10px] text-white/40">Emotional landscape, how do you feel?</p>
+                                        <h3 className="font-bold text-sm">{t('scan.sections.heart.title')}</h3>
+                                        <p className="text-[10px] text-white/40">{t('scan.sections.heart.description')}</p>
                                     </div>
                                 </div>
                                 <input
                                     className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm"
-                                    placeholder="e.g., calm, happy, sad, anxious, stressed"
+                                    placeholder={t('scan.sections.heart.placeholder')}
                                     type="text"
                                     value={heartScan}
                                     onChange={(e) => setHeartScan(e.target.value)}
@@ -134,13 +176,13 @@ const WellnessScan: React.FC = () => {
                                         <Sun className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-sm">Environment Scan</h3>
-                                        <p className="text-[10px] text-white/40">Your surrounding today?</p>
+                                        <h3 className="font-bold text-sm">{t('scan.sections.environment.title')}</h3>
+                                        <p className="text-[10px] text-white/40">{t('scan.sections.environment.description')}</p>
                                     </div>
                                 </div>
                                 <input
                                     className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm"
-                                    placeholder="e.g., peaceful, cluttered, noisy, work, home"
+                                    placeholder={t('scan.sections.environment.placeholder')}
                                     type="text"
                                     value={envScan}
                                     onChange={(e) => setEnvScan(e.target.value)}
@@ -154,13 +196,13 @@ const WellnessScan: React.FC = () => {
                                         <Wind className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-sm">Deep Breath Action</h3>
-                                        <p className="text-[10px] text-white/40">After a deep breath, what action did you think of?</p>
+                                        <h3 className="font-bold text-sm">{t('scan.sections.breath.title')}</h3>
+                                        <p className="text-[10px] text-white/40">{t('scan.sections.breath.description')}</p>
                                     </div>
                                 </div>
                                 <textarea
                                     className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm resize-none h-24"
-                                    placeholder="After taking a deep breath, I thought of when I..."
+                                    placeholder={t('scan.sections.breath.placeholder')}
                                     value={breathAction}
                                     onChange={(e) => setBreathAction(e.target.value)}
                                 ></textarea>
@@ -173,13 +215,13 @@ const WellnessScan: React.FC = () => {
                                         <FileEdit className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-sm">Daily Reflection</h3>
-                                        <p className="text-[10px] text-white/40">Journaling:One sentence for today</p>
+                                        <h3 className="font-bold text-sm">{t('scan.sections.reflection.title')}</h3>
+                                        <p className="text-[10px] text-white/40">{t('scan.sections.reflection.description')}</p>
                                     </div>
                                 </div>
                                 <textarea
                                     className="w-full bg-white/5 border border-white/10 rounded-xl p-4 shadow-sm focus:ring-2 focus:ring-[#13ec13]/50 outline-none transition-all placeholder:text-white/20 text-white text-sm resize-none h-24"
-                                    placeholder="Today I ..."
+                                    placeholder={t('scan.sections.reflection.placeholder')}
                                     value={reflection}
                                     onChange={(e) => setReflection(e.target.value)}
                                 ></textarea>
@@ -187,25 +229,17 @@ const WellnessScan: React.FC = () => {
 
                             {/* Vibe Selector */}
                             <div className="space-y-4 pb-8">
-                                <h3 className="font-bold text-center text-white text-sm">Overall Vibe</h3>
+                                <h3 className="font-bold text-center text-white text-sm">{t('scan.overall_vibe')}</h3>
                                 <div className="space-y-6">
                                     <div className="flex justify-between items-center bg-white/10 backdrop-blur-md p-4 xs:p-5 rounded-2xl border border-white/10 overflow-x-auto gap-4 no-scrollbar">
-                                        {[
-                                            { emoji: '✨', label: 'Hopeful / Inspired', desc: 'Optimism, motivation, belief that things can improve.' },
-                                            { emoji: '😊', label: 'Happy / Content', desc: 'Everyday joy, satisfaction, feeling "okay" with life.' },
-                                            { emoji: '😌', label: 'Calm / Peaceful', desc: 'Relaxation, relief, mindfulness, emotional ease.' },
-                                            { emoji: '😐', label: 'Neutral / Steady', desc: 'Neither good nor bad — just being.' },
-                                            { emoji: '🤔', label: 'Thoughtful / Uncertain', desc: 'Reflection, questioning, mild confusion or contemplation.' },
-                                            { emoji: '😔', label: 'Sad / Low', desc: 'Disappointment, loneliness, emotional heaviness.' },
-                                            { emoji: '😤', label: 'Stressed / Frustrated', desc: 'Pressure, irritation, feeling overwhelmed.' }
-                                        ].map((vibe, i) => (
+                                        {vibes.map((vibe) => (
                                             <button
-                                                key={vibe.emoji}
+                                                key={vibe.id}
                                                 type="button"
-                                                onClick={() => setSelectedVibe(vibe.label === selectedVibe ? null : vibe.label)}
-                                                onMouseEnter={() => setHoveredVibe(vibe.label)}
+                                                onClick={() => setSelectedVibe(vibe.id === selectedVibe ? null : vibe.id)}
+                                                onMouseEnter={() => setHoveredVibe(vibe.id)}
                                                 onMouseLeave={() => setHoveredVibe(null)}
-                                                className={`text-2xl xs:text-3xl transition-all active:scale-125 flex-shrink-0 ${(hoveredVibe === vibe.label || selectedVibe === vibe.label)
+                                                className={`text-2xl xs:text-3xl transition-all active:scale-125 flex-shrink-0 ${(hoveredVibe === vibe.id || selectedVibe === vibe.id)
                                                     ? 'scale-125 grayscale-0'
                                                     : 'grayscale opacity-60 hover:opacity-100 hover:grayscale-0'
                                                     }`}
@@ -219,29 +253,19 @@ const WellnessScan: React.FC = () => {
                                     <div className="min-h-[60px] flex flex-col items-center justify-center text-center px-4 animate-in fade-in duration-300">
                                         {(() => {
                                             const activeVibe = hoveredVibe || selectedVibe;
-                                            const vibeInfo = [
-                                                { label: 'Happy / Content', desc: 'Everyday joy, satisfaction, feeling "okay" with life.' },
-                                                { label: 'Calm / Peaceful', desc: 'Relaxation, relief, mindfulness, emotional ease.' },
-                                                { label: 'Neutral / Steady', desc: 'Neither good nor bad — just being.' },
-                                                { label: 'Thoughtful / Uncertain', desc: 'Reflection, questioning, mild confusion or contemplation.' },
-                                                { label: 'Sad / Low', desc: 'Disappointment, loneliness, emotional heaviness.' },
-                                                { label: 'Stressed / Frustrated', desc: 'Pressure, irritation, feeling overwhelmed.' },
-                                                { label: 'Hopeful / Inspired', desc: 'Optimism, motivation, belief that things can improve.' }
-                                            ].find(v => v.label === activeVibe);
-
-                                            if (vibeInfo) {
+                                            if (activeVibe) {
                                                 return (
                                                     <>
                                                         <p className="text-[#13ec13] font-bold text-xs uppercase tracking-wider mb-1">
-                                                            {vibeInfo.label}
+                                                            {t(`scan.vibes.${activeVibe}.label`)}
                                                         </p>
                                                         <p className="text-white/60 text-[10px] leading-relaxed">
-                                                            {vibeInfo.desc}
+                                                            {t(`scan.vibes.${activeVibe}.desc`)}
                                                         </p>
                                                     </>
                                                 );
                                             }
-                                            return <p className="text-white/30 text-[10px] italic">Tap an emoji to see how you feel</p>;
+                                            return <p className="text-white/30 text-[10px] italic">{t('scan.vibe_hint')}</p>;
                                         })()}
                                     </div>
                                 </div>
@@ -251,7 +275,7 @@ const WellnessScan: React.FC = () => {
                 </main>
 
                 {/* Bottom Action Bar */}
-                <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 pb-8 pt-4 bg-gradient-to-t from-black/20 to-transparent z-40">
+                <div className="fixed bottom-20 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 pb-4 pt-4 bg-gradient-to-t from-black/20 to-transparent z-40">
                     <button
                         onClick={handleSubmit}
                         disabled={isSubmitting}
@@ -260,10 +284,12 @@ const WellnessScan: React.FC = () => {
                             : 'bg-[#13ec13] text-slate-900 shadow-[#13ec13]/30'
                             }`}
                     >
-                        <span>{isSubmitting ? 'Processing Scan...' : 'Submit Scan'}</span>
+                        <span>{isSubmitting ? t('scan.processing') : t('scan.submit')}</span>
                         <Send className={`w-4 h-4 ${isSubmitting ? 'animate-pulse' : ''}`} />
                     </button>
                 </div>
+
+                <BottomMenu />
             </div>
         </div>
     );

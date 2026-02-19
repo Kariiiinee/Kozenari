@@ -1,0 +1,227 @@
+{
+    "common": {
+        "app_name": "KOZENARI",
+        "version_info": "Compagnon de pleine conscience v1.0",
+        "daily_ritual": "Rituel Quotidien",
+        "swipe_up": "Glissez vers le haut pour commencer le rituel",
+        "greetings": {
+            "morning": "Bonjour",
+            "afternoon": "Bon après-midi",
+            "evening": "Bonsoir"
+        },
+        "body": "Corps",
+        "heart": "Cœur",
+        "guest_user": "Utilisateur Invité"
+    },
+    "navigation": {
+        "home": "Accueil",
+        "morning_ritual": "Rituel Matinal",
+        "daily_scan": "Scan Quotidien",
+        "ai_insights": "Analyses IA",
+        "history": "Historique",
+        "community": "Communauté",
+        "profile": "Profil"
+    },
+    "home": {
+        "daily_quote_title": "Citation du jour",
+        "themes": {
+            "zen": "Présence • Silence • Pleine Conscience",
+            "calm": "Paix • Soulagement du Stress • Douceur",
+            "motivation": "Action • Courage • Intention"
+        }
+    },
+    "history": {
+        "title_main": "Votre",
+        "title_sub": "Historique",
+        "subtitle": "Votre voyage de pleine conscience",
+        "vibe_distribution": "Distribution des vibes",
+        "mood_trends": "Tendances de l'humeur",
+        "completion_log": "Journal de complétion",
+        "recent_entries": "Entrées récentes du journal",
+        "scans_count_one": "{{count}} Scan",
+        "scans_count_other": "{{count}} Scans",
+        "no_history": "Aucun historique pour le moment.",
+        "clear_history": "Effacer l'historique",
+        "clear_confirm": "Êtes-vous sûr de vouloir effacer votre historique ?"
+    },
+    "scan": {
+        "daily_scan": "Scan quotidien",
+        "title_main": "Check-in",
+        "title_sub": "Conscient",
+        "subtitle": "Prenez un moment pour vous écouter.",
+        "error_incomplete": "Veuillez remplir toutes les sections pour recevoir votre analyse personnalisée.",
+        "sections": {
+            "body": {
+                "title": "Scan Corporel",
+                "description": "Sensations physiques, où ressentez-vous des tensions ?",
+                "placeholder": "ex: tête, épaules, dos, jambes, pieds"
+            },
+            "heart": {
+                "title": "Scan du Cœur",
+                "description": "Paysage émotionnel, comment vous sentez-vous ?",
+                "placeholder": "ex: calme, heureux, triste, anxieux, stressé"
+            },
+            "environment": {
+                "title": "Scan de l'Environnement",
+                "description": "Votre environnement observé aujourd'hui ?",
+                "placeholder": "ex: paisible, encombré, bruyant, travail, maison"
+            },
+            "breath": {
+                "title": "Action après Grande Respiration",
+                "description": "Après une grande respiration, à quelle action avez-vous pensé ?",
+                "placeholder": "Après avoir pris une grande respiration, j'ai pensé à quand je..."
+            },
+            "reflection": {
+                "title": "Réflexion Quotidienne",
+                "description": "Journaling : Une phrase pour aujourd'hui",
+                "placeholder": "Aujourd'hui j'ai ..."
+            }
+        },
+        "overall_vibe": "Vibe Générale",
+        "vibe_hint": "Appuyez sur un emoji pour voir comment vous vous sentez",
+        "submit": "Envoyer le scan",
+        "processing": "Analyse en cours...",
+        "vibes": {
+            "hopeful": {
+                "emoji": "✨",
+                "label": "Espoir / Inspiré",
+                "desc": "Optimisme, motivation, conviction que les choses peuvent s'améliorer."
+            },
+            "happy": {
+                "emoji": "😊",
+                "label": "Heureux / Content",
+                "desc": "Joie quotidienne, satisfaction, se sentir \"bien\" dans sa vie."
+            },
+            "calm": {
+                "emoji": "😌",
+                "label": "Calme / Paisible",
+                "desc": "Relaxation, soulagement, pleine conscience, aisance émotionnelle."
+            },
+            "neutral": {
+                "emoji": "😐",
+                "label": "Neutre / Stable",
+                "desc": "Ni bon ni mauvais — simplement être."
+            },
+            "thoughtful": {
+                "emoji": "🤔",
+                "label": "Réfléchi / Incertain",
+                "desc": "Réflexion, questionnement, légère confusion ou contemplation."
+            },
+            "sad": {
+                "emoji": "😔",
+                "label": "Triste / Bas",
+                "desc": "Déception, solitude, lourdeur émotionnelle."
+            },
+            "stressed": {
+                "emoji": "😤",
+                "label": "Stressé / Frustré",
+                "desc": "Pression, irritation, sentiment d'être submergé."
+            }
+        }
+    },
+    "insights": {
+        "loading": {
+            "title_main": "Personnalisation de votre",
+            "title_sub": "Flow",
+            "thinking": "L'IA réfléchit...",
+            "analyzing": "Analyse de vos résultats de scan pour créer une micro-routine unique juste pour vous."
+        },
+        "no_data": {
+            "message": "Aucune donnée de scan trouvée. Veuillez d'abord effectuer un scan.",
+            "button": "Commencer le scan"
+        },
+        "status": {
+            "complete": "Analyse Terminée"
+        },
+        "title_main": "Votre Analyse",
+        "title_sub": "Quotidienne",
+        "subtitle": "Assistant de pleine conscience IA",
+        "sections": {
+            "micro_actions": "Micro-Actions"
+        },
+        "actions": {
+            "save": "Enregistrer l'entrée",
+            "recorded": "Voyage enregistré",
+            "share_community": "Partager avec la communauté",
+            "view_history_trend": "Historique & Tendances"
+        }
+    },
+    "routine": {
+        "title_pre": "Rituel",
+        "title_post": "Matinal",
+        "headline_main": "Éveillez vos",
+        "headline_sub": "Sens.",
+        "intro": "Avant d'aller plus loin, ancrons-nous dans le moment présent.",
+        "steps": {
+            "hydration": "Hydratation : Boire un verre d'eau",
+            "light": "Lumière : 5 minutes de soleil",
+            "movement": "Mouvement : 2 minutes d'étirements légers",
+            "breath": "Respiration : 3 grandes respirations conscientes"
+        },
+        "status": {
+            "ready": "Prêt à commencer",
+            "incomplete": "Complétez votre rituel pour continuer"
+        },
+        "success": "Vous êtes prêt pour une excellente journée !",
+        "completed_btn": "Rituel Terminé"
+    },
+    "modal": {
+        "ai_insight": "Analyse IA",
+        "recommended_actions": "Actions recommandées",
+        "body_scan": "Scan Corporel",
+        "heart_scan": "Scan du Cœur",
+        "environment": "Environnement",
+        "breath_action": "Action après respiration"
+    },
+    "header": {
+        "play_music": "Jouer la musique d'ambiance",
+        "pause_music": "Mettre en pause la musique d'ambiance"
+    },
+    "languages": {
+        "en": "English",
+        "fr": "Français"
+    },
+    "transition": {
+        "daily_transition": "Transition Quotidienne",
+        "see_you_title": "À ce",
+        "evening": "soir.",
+        "quote": "\"Nous vous souhaitons une journée paisible.\"",
+        "description": "Nous vous retrouverons ce soir pour votre scan et votre rituel de détente. D'ici là, ",
+        "breathe_deep": "respirez profondément.",
+        "swipe_anyway": "Glissez vers le haut pour scanner quand même"
+    },
+    "auth": {
+        "login": "Connexion",
+        "email": "Adresse Email",
+        "send_magic_link": "Envoyer le lien magique",
+        "check_email": "Vérifiez vos emails",
+        "magic_link_sent": "Un lien magique a été envoyé à votre adresse email.",
+        "error_auth": "Échec de l'authentification. Veuillez réessayer.",
+        "sign_out": "Déconnexion",
+        "create_account": "Créer un compte"
+    },
+    "profile": {
+        "title": "Complétez Votre Profil",
+        "display_name": "Nom d'affichage",
+        "display_name_placeholder": "Comment devrions-nous vous appeler ?",
+        "avatar": "Choisissez Votre Avatar",
+        "upload_avatar": "Charger une Image",
+        "predefined_avatars": "Options Prédéfinies",
+        "country": "Pays",
+        "country_placeholder": "Sélectionnez ou recherchez...",
+        "save_profile": "Enregistrer le Profil",
+        "error_save": "Échec de l'enregistrement du profil. Veuillez réessayer.",
+        "display_name_taken": "Ce nom d'affichage est déjà utilisé.",
+        "success_save": "Profil enregistré avec succès !"
+    },
+    "community": {
+        "title": "Communauté",
+        "vibe_feed": "Flux Social de Vibes",
+        "my_vibe": "Mon Vibe Actuel",
+        "feeling": "Se sentant",
+        "ready_to_share": "Connectez-vous pour partager votre vibe",
+        "post_new": "+ Nouveau Vibe",
+        "no_posts": "Pas encore de vibes partagés. Soyez le premier !",
+        "end_stream": "Fin du flux"
+    }
+}

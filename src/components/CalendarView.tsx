@@ -9,6 +9,14 @@ interface CalendarViewProps {
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 const VIBE_EMOJIS: Record<string, string> = {
+    'hopeful': '✨',
+    'happy': '😊',
+    'calm': '😌',
+    'neutral': '😐',
+    'thoughtful': '🤔',
+    'sad': '😔',
+    'stressed': '😤',
+    // Legacy label support
     'Hopeful / Inspired': '✨',
     'Happy / Content': '😊',
     'Calm / Peaceful': '😌',

@@ -1,0 +1,227 @@
+{
+    "common": {
+        "app_name": "KOZENARI",
+        "version_info": "Mindfulness Companion v1.0",
+        "daily_ritual": "Daily Ritual",
+        "swipe_up": "Swipe up to start ritual",
+        "greetings": {
+            "morning": "Good morning",
+            "afternoon": "Good afternoon",
+            "evening": "Good evening"
+        },
+        "body": "Body",
+        "heart": "Heart",
+        "guest_user": "Guest User"
+    },
+    "navigation": {
+        "home": "Home",
+        "morning_ritual": "Ritual",
+        "daily_scan": "Daily Scan",
+        "ai_insights": "AI Insights",
+        "history": "History",
+        "community": "Community",
+        "profile": "Profile"
+    },
+    "home": {
+        "daily_quote_title": "Daily quote",
+        "themes": {
+            "zen": "Presence • Stillness • Mindfulness",
+            "calm": "Peace • Stress Relief • Gentleness",
+            "motivation": "Action • Courage • Purpose"
+        }
+    },
+    "history": {
+        "title_main": "Wellness",
+        "title_sub": "History",
+        "subtitle": "Your mindfulness journey",
+        "vibe_distribution": "Vibe distribution",
+        "mood_trends": "Mood Trends",
+        "completion_log": "Completion Log",
+        "recent_entries": "Recent Journey Entries",
+        "scans_count_one": "{{count}} Scan",
+        "scans_count_other": "{{count}} Scans",
+        "no_history": "No history yet.",
+        "clear_history": "Clear History",
+        "clear_confirm": "Are you sure you want to clear your history?"
+    },
+    "scan": {
+        "daily_scan": "Daily Scan",
+        "title_main": "Mindful",
+        "title_sub": "Check-in",
+        "subtitle": "Take a moment to listen to yourself.",
+        "error_incomplete": "Please complete all sections to receive your personalized insight.",
+        "sections": {
+            "body": {
+                "title": "Body Scan",
+                "description": "Physical sensations, where do you feel tense?",
+                "placeholder": "e.g., head, shoulder, back, legs, feet"
+            },
+            "heart": {
+                "title": "Heart Scan",
+                "description": "Emotional landscape, how do you feel?",
+                "placeholder": "e.g., calm, happy, sad, anxious, stressed"
+            },
+            "environment": {
+                "title": "Environment Scan",
+                "description": "Your surrounding today?",
+                "placeholder": "e.g., peaceful, cluttered, noisy, work, home"
+            },
+            "breath": {
+                "title": "Deep Breath Action",
+                "description": "After a deep breath, what action did you think of?",
+                "placeholder": "After taking a deep breath, I thought of when I..."
+            },
+            "reflection": {
+                "title": "Daily Reflection",
+                "description": "Journaling: One sentence for today",
+                "placeholder": "Today I ..."
+            }
+        },
+        "overall_vibe": "Overall Vibe",
+        "vibe_hint": "Tap an emoji to see how you feel",
+        "submit": "Submit Scan",
+        "processing": "Processing Scan...",
+        "vibes": {
+            "hopeful": {
+                "emoji": "✨",
+                "label": "Hopeful / Inspired",
+                "desc": "Optimism, motivation, belief that things can improve."
+            },
+            "happy": {
+                "emoji": "😊",
+                "label": "Happy / Content",
+                "desc": "Everyday joy, satisfaction, feeling \"okay\" with life."
+            },
+            "calm": {
+                "emoji": "😌",
+                "label": "Calm / Peaceful",
+                "desc": "Relaxation, relief, mindfulness, emotional ease."
+            },
+            "neutral": {
+                "emoji": "😐",
+                "label": "Neutral / Steady",
+                "desc": "Neither good nor bad — just being."
+            },
+            "thoughtful": {
+                "emoji": "🤔",
+                "label": "Thoughtful / Uncertain",
+                "desc": "Reflection, questioning, mild confusion or contemplation."
+            },
+            "sad": {
+                "emoji": "😔",
+                "label": "Sad / Low",
+                "desc": "Disappointment, loneliness, emotional heaviness."
+            },
+            "stressed": {
+                "emoji": "😤",
+                "label": "Stressed / Frustrated",
+                "desc": "Pressure, irritation, feeling overwhelmed."
+            }
+        }
+    },
+    "insights": {
+        "loading": {
+            "title_main": "Personalizing Your",
+            "title_sub": "Flow",
+            "thinking": "AI is thinking...",
+            "analyzing": "Analyzing your scan results to create a unique micro-routine just for you."
+        },
+        "no_data": {
+            "message": "No scan data found. Please complete a scan first.",
+            "button": "Start Scan"
+        },
+        "status": {
+            "complete": "Analysis Complete"
+        },
+        "title_main": "Your Daily",
+        "title_sub": "Insight",
+        "subtitle": "AI Mindful Assistant",
+        "sections": {
+            "micro_actions": "Micro-Actions"
+        },
+        "actions": {
+            "save": "Save Entry",
+            "recorded": "Journey Recorded",
+            "share_community": "Share with Community",
+            "view_history_trend": "View History & Trend"
+        }
+    },
+    "routine": {
+        "title_pre": "Morning",
+        "title_post": "Ritual",
+        "headline_main": "Awaken your",
+        "headline_sub": "Senses.",
+        "intro": "Before we dive deep, let's ground ourselves in the present moment.",
+        "steps": {
+            "hydration": "Hydration: Drink a glass of water",
+            "light": "Light: 5 minutes of sunlight",
+            "movement": "Movement: 2-minute light stretch",
+            "breath": "Breath: 3 deep conscious breaths"
+        },
+        "status": {
+            "ready": "Ready to begin",
+            "incomplete": "Complete your ritual to proceed"
+        },
+        "success": "You're all set for a great day!",
+        "completed_btn": "Ritual Completed"
+    },
+    "modal": {
+        "ai_insight": "AI Insight",
+        "recommended_actions": "Recommended Actions",
+        "body_scan": "Body Scan",
+        "heart_scan": "Heart Scan",
+        "environment": "Environment",
+        "breath_action": "Breath Action"
+    },
+    "header": {
+        "play_music": "Play Ambient Music",
+        "pause_music": "Pause Ambient Music"
+    },
+    "languages": {
+        "en": "English",
+        "fr": "Français"
+    },
+    "transition": {
+        "daily_transition": "Daily Transition",
+        "see_you_title": "See you this",
+        "evening": "evening.",
+        "quote": "\"Wishing you a peaceful day ahead.\"",
+        "description": "We'll see you this evening for your scan and wind-down ritual. Until then, ",
+        "breathe_deep": "breathe deep.",
+        "swipe_anyway": "Swipe up to daily scan anyway"
+    },
+    "auth": {
+        "login": "Login",
+        "email": "Email Address",
+        "send_magic_link": "Send Magic Link",
+        "check_email": "Check your email",
+        "magic_link_sent": "A magic link has been sent to your email.",
+        "error_auth": "Authentication failed. Please try again.",
+        "sign_out": "Sign Out",
+        "create_account": "Create an account"
+    },
+    "profile": {
+        "title": "Complete Your Profile",
+        "display_name": "Display Name",
+        "display_name_placeholder": "How should we call you?",
+        "avatar": "Choose Your Avatar",
+        "upload_avatar": "Upload Image",
+        "predefined_avatars": "Predefined Options",
+        "country": "Country",
+        "country_placeholder": "Select or search...",
+        "save_profile": "Save Profile",
+        "error_save": "Failed to save profile. Please try again.",
+        "display_name_taken": "This display name is already taken.",
+        "success_save": "Profile saved successfully!"
+    },
+    "community": {
+        "title": "Community",
+        "vibe_feed": "Social Vibe Feed",
+        "my_vibe": "My Current Vibe",
+        "feeling": "Feeling",
+        "ready_to_share": "Sign in to share your vibe",
+        "post_new": "+ Post New Vibe",
+        "no_posts": "No vibes shared yet. Be the first!",
+        "end_stream": "End of stream"
+    }
+}

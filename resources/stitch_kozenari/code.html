@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Daily Routine Transition</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@300;400;500;600&amp;family=Material+Icons&amp;display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#4ADE80", // A fresh calming green
+            "background-light": "#F3F4F6",
+            "background-dark": "#111827",
+            "glass-light": "rgba(255, 255, 255, 0.25)",
+            "glass-dark": "rgba(0, 0, 0, 0.4)",
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+          },
+          borderRadius: {
+            DEFAULT: "12px",
+            'xl': "24px",
+            '2xl': "32px",
+          },
+          backdropBlur: {
+            xs: '2px',
+          }
+        },
+      },
+    };
+  </script>
+  <style>
+    .glass-panel {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .text-shadow {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark min-h-screen font-sans text-white relative overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <img alt="Misty forest landscape with pine trees fading into fog"
+      class="w-full h-full object-cover brightness-[0.85] dark:brightness-[0.65]"
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEYTm7heLgMVTyN4xJecgjVfON1jlsSZpaeRtU1MyTsOqahuTBuCqeghI-n1wwZMExvoQ_0d7I99laMqynWZjSFnRY948iNxJD1qVmhD4y3JQJ-SqxFw-sWbCM022XJS8GSTAvoNoWrWTlywhoN8OEcyO9M6D9NCOpguvVbZJRISKjlC4xMMNzNgv--xXZVxDVE2Nx4iwIK9wyl7PpTdtXUb_FtfTTec4r72qBxK2wQbrvjhEXX3KRhceIz0nDfJu5Q8xInx1hC58" />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60"></div>
+  </div>
+  <div
+    class="relative z-10 flex flex-col h-screen px-6 py-6 safe-area-inset-top safe-area-inset-bottom justify-between">
+    <header class="flex justify-between items-center mt-2">
+      <div class="flex items-center gap-3">
+        <div
+          class="bg-primary/90 text-white p-2 rounded-full flex items-center justify-center w-10 h-10 shadow-lg backdrop-blur-sm">
+          <span class="material-icons text-xl">spa</span>
+        </div>
+        <span class="text-xl font-semibold tracking-wider uppercase text-white drop-shadow-md">Kozenari</span>
+      </div>
+      <div class="flex gap-3">
+        <button
+          class="w-10 h-10 rounded-full bg-white/20 dark:bg-black/30 backdrop-blur-md flex items-center justify-center hover:bg-white/30 transition-colors border border-white/10">
+          <span class="material-icons text-white text-lg">volume_off</span>
+        </button>
+        <button
+          class="w-10 h-10 rounded-full bg-white/20 dark:bg-black/30 backdrop-blur-md flex items-center justify-center hover:bg-white/30 transition-colors border border-white/10">
+          <span class="material-icons text-white text-lg">menu</span>
+        </button>
+      </div>
+    </header>
+    <main class="flex-grow flex flex-col justify-center items-center w-full max-w-md mx-auto">
+      <div class="w-full mb-8 text-left animate-fade-in-up">
+        <p class="text-primary font-bold text-sm tracking-widest uppercase mb-2 ml-1">Daily Transition</p>
+        <h1 class="text-4xl md:text-5xl font-medium text-white leading-tight drop-shadow-lg">
+          See you this<br />evening.
+        </h1>
+      </div>
+      <div
+        class="w-full bg-glass-light dark:bg-glass-dark glass-panel rounded-2xl p-8 text-center relative overflow-hidden transition-all duration-500 transform hover:scale-[1.01]">
+        <div
+          class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50">
+        </div>
+        <div class="mb-6 flex justify-center">
+          <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+            <span class="material-icons text-primary text-2xl">wb_twilight</span>
+          </div>
+        </div>
+        <h2 class="font-serif italic text-2xl text-white mb-4 leading-relaxed">
+          "Wishing you a peaceful day ahead."
+        </h2>
+        <div class="h-px w-16 bg-white/30 mx-auto my-6"></div>
+        <p class="text-white/80 text-sm leading-relaxed font-light">
+          We'll see you this evening for your scan and wind-down ritual. Until then, breathe deep.
+        </p>
+      </div>
+    </main>
+    <footer class="mb-6 flex flex-col items-center gap-6 w-full max-w-md mx-auto">
+      <div class="flex flex-col items-center gap-2 opacity-70 animate-bounce">
+        <span class="text-[10px] tracking-[0.2em] uppercase font-medium text-white/90">Swipe up to resume day</span>
+        <span class="material-icons text-white/80 text-sm">keyboard_arrow_up</span>
+      </div>
+      <button
+        class="w-full bg-white/10 dark:bg-black/40 hover:bg-white/20 active:bg-white/25 backdrop-blur-md border border-white/20 text-white font-medium py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 group">
+        <span class="material-icons text-sm group-hover:-translate-x-1 transition-transform">home</span>
+        <span>Return Home</span>
+      </button>
+    </footer>
+  </div>
+  <script>
+    // Simple fade-in animation simulation
+    document.addEventListener('DOMContentLoaded', () => {
+      const mainContent = document.querySelector('main');
+      mainContent.classList.add('opacity-0', 'translate-y-4');
+      setTimeout(() => {
+        mainContent.classList.remove('opacity-0', 'translate-y-4');
+        mainContent.classList.add('transition-all', 'duration-1000', 'ease-out');
+      }, 100);
+    });
+  </script>
+
+</body>
+
+</html>

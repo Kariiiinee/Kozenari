@@ -14,15 +14,15 @@ export interface ScanHistoryItem {
     breathAction?: string;
 }
 
-export class KozendoDatabase extends Dexie {
+export class KozenariDatabase extends Dexie {
     scans!: Table<ScanHistoryItem>;
 
     constructor() {
-        super('KozendoDB');
+        super('KozenariDB');
         this.version(1).stores({
             scans: 'id, timestamp, vibe' // Primary key and indexed props
         });
     }
 }
 
-export const db = new KozendoDatabase();
+export const db = new KozenariDatabase();

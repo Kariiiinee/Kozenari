@@ -2,9 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, ArrowUp, Sun, VolumeX, Menu } from 'lucide-react';
 import Header from '../components/Header';
+import { useTranslation } from 'react-i18next';
 
 const RoutineTransition: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     return (
         <div className="bg-[#f6f8f6] font-sans text-slate-800 min-h-screen flex flex-col items-center">
@@ -20,15 +22,15 @@ const RoutineTransition: React.FC = () => {
                 </div>
 
                 {/* Header */}
-                <Header title="KOZENDO" transparent dark />
+                <Header title="KOZENARI" transparent dark />
 
                 {/* Main Content */}
                 <main className="relative z-10 flex-1 px-6 pt-12 flex flex-col items-center">
                     <div className="w-full mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                        <p className="text-[#13ec13] font-bold text-xs tracking-[0.2em] uppercase mb-2">Daily Transition</p>
+                        <p className="text-[#13ec13] font-bold text-xs tracking-[0.2em] uppercase mb-2">{t('transition.daily_transition')}</p>
                         <h1 className="text-4xl md:text-5xl font-light text-white leading-tight drop-shadow-lg">
-                            See you this<br />
-                            <span className="font-bold">evening.</span>
+                            {t('transition.see_you_title')}<br />
+                            <span className="font-bold">{t('transition.evening')}</span>
                         </h1>
                     </div>
 
@@ -43,13 +45,13 @@ const RoutineTransition: React.FC = () => {
                         </div>
 
                         <h2 className="italic text-2xl text-white mb-6 leading-relaxed font-serif">
-                            "Wishing you a peaceful day ahead."
+                            {t('transition.quote')}
                         </h2>
 
                         <div className="h-px w-16 bg-white/20 mx-auto mb-6" />
 
                         <p className="text-white/70 text-sm leading-relaxed font-light px-2">
-                            We'll see you this evening for your scan and wind-down ritual. Until then, <span className="text-white font-medium">breathe deep.</span>
+                            {t('transition.description')}<span className="text-white font-medium">{t('transition.breathe_deep')}</span>
                         </p>
                     </div>
                 </main>
@@ -57,7 +59,7 @@ const RoutineTransition: React.FC = () => {
                 {/* Footer Actions */}
                 <footer className="relative z-10 px-6 pb-12 flex flex-col items-center gap-8">
                     <div className="flex flex-col items-center gap-2 opacity-60 animate-bounce cursor-pointer" onClick={() => navigate('/scan')}>
-                        <p className="text-[10px] tracking-[0.2em] uppercase font-bold text-white">Swipe up to daily scan anyway</p>
+                        <p className="text-[10px] tracking-[0.2em] uppercase font-bold text-white">{t('transition.swipe_anyway')}</p>
                         <ArrowUp className="text-white w-4 h-4" />
                     </div>
                 </footer>

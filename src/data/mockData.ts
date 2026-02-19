@@ -1,6 +1,6 @@
 export const mockData = {
     user: {
-        name: "",
+        name: "Warrior",
         isMember: true,
         profileImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAz4lwUsWLcilafofHsd8nLsrMU_7E7rcXD39QLS1UHerTWNP5uAf5bnWjUXcOOujlZSmH8N0DYHD_djuC-gyKPnLk5bmWNHNDZwsG5f8L7Ii2fRBlQNLF-wgKqB8EdmOn-rRxbIqlWbQS-NDSogfO_n1JMR17Uu5CpxPcNZIt9VKFcrGuNk1ktUzXYWV6uKRa-WPB4dfmL4nIXqowkPOJ1xT1-01hCNVj95r0ZoqeWmaD5IH0LFECJt2DqJBzzfIZnNc8Hq85GQrxo"
     },
@@ -13,9 +13,9 @@ export const mockData = {
     insights: {
         mainInsight: "It sounds like you've had a demanding morning. It's okay to feel a bit drained; your resilience is showing. Let's focus on reclaiming your energy.",
         microActions: [
-            { id: 1, text: "Take a 5-minute stretch", icon: "accessibility_new" },
-            { id: 2, text: "Drink a glass of water", icon: "water_drop" },
-            { id: 3, text: "Deep breathing (3 reps)", icon: "air" }
+            { id: 1, text: "Take a 5-minute stretch", icon: "stretch" },
+            { id: 2, text: "Drink a glass of water", icon: "water" },
+            { id: 3, text: "Deep breathing (3 reps)", icon: "breath" }
         ],
         upliftingQuote: "Small steps lead to great journeys. You're doing enough.",
         recommendedActivity: {

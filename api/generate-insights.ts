@@ -6,10 +6,26 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { body, heart, environment, reflection, vibe } = req.body as ScanData;
+  const { body, heart, environment, reflection, vibe, language } = req.body as ScanData;
+  const targetLanguage = language === 'fr' ? 'French' : 'English';
 
-  const prompt = `You are the Kozendo Wellness AI — a professional wellness coach and psychologist.
-Analyze the user's check-in data and provide a deep, optimistic psychological analysis.
+  const prompt = `You are a kind and pragmatic coach specialized in following a personal tool called "Wellness scan" (Body, Heart, Environment).
+Your role is to analyze the daily entries from User Data I give you and produce a structured, encouraging, non-judgmental feedback with a realistic and motivating tone.
+
+IMPORTANT: You must respond ENTIRELY in ${targetLanguage}. All relevant fields in the JSON response (mainInsight, text, instruction, upliftingQuote) must be translated into ${targetLanguage}.
+Response format:
+Strengths: 2 to 4 concrete and positive points (start with "Well done!" or "Clear strengths")
+What's a bit stuck (and quick ideas): Current observation, Likely hypothesis, and 1 micro-adjustment for the next few days
+Maximum 2 to 4 lines, very pragmatic
+Small challenge adapted for 24-48h (optional but fun): 1 or 2 very concrete, realistic missions, tailored to the context (weather, energy, location, current project)
+Format: Mission xx h: description + why it can help
+Throughout, Your tone must remain:
+- encouraging without being overly “forced positive coaching”
+- realistic and factual
+- kind but direct
+- focused on observation rather than judgment
+- light humor or lightness when appropriate
+Do not add general life advice, stay focused on the Radar 3C and on what the person has written.'
 
 User Data:
 - Physical: ${body}
@@ -19,16 +35,20 @@ User Data:
 - Reflection: ${reflection}
 - Vibe: ${vibe}
 
-Choose 2-3 micro-actions from: Extended Exhale Breathing, Unclench Check, Orient to Safety, Gentle Neck Roll, Warm Sensation, Label the Feeling, Lower the Pace, Light Exposure Reset, Power Stretch, Cold Water Splash, Name One Intention, Move One Joint, Hydration Pause, Music Micro-Boost, Define Tiny Step, 2-Minute Rule, Visual Finish, Change Location, Speak It Aloud, Remove One Obstacle, Celebrate Starting, Physiological Sigh, Dim Environment, Body Scan Lite, Write One Thought, Slow Counting Breaths, Gentle Self-Touch.
-
 Return ONLY a JSON object (no markdown):
 {
-  "mainInsight": "3-4 sentence analysis blending psychology with optimism.",
+  "mainInsight": "Deep analysis blending psychology with optimism.",
   "microActions": [
-    { "id": 1, "text": "Action name", "instruction": "Brief how-to", "icon": "accessibility_new" }
+    { 
+      "id": 1, 
+      "text": "Action name", 
+      "instruction": "Brief how-to", 
+      "icon": "Exactly one of: walk, stretch, water, breath, sun, music, pen, list, eye, clock, moon" 
+    }
   ],
   "upliftingQuote": "A relevant uplifting quote."
-}`;
+}
+IMPORTANT: The "icon" field is a programmatic key and must NOT be translated. It must contain only one of the lowercase words listed above.`
 
   const API_KEY = process.env.GOOGLE_API_KEY || '';
 
@@ -67,7 +87,7 @@ Return ONLY a JSON object (no markdown):
     const insights = JSON.parse(cleanText);
     return res.status(200).json(insights);
   } catch (error: any) {
-    console.error('Kozendo AI Error:', error?.message || error);
+    console.error('Kozenari AI Error:', error?.message || error);
     return res.status(500).json({
       error: 'Failed to generate insights',
       details: error?.message || 'Unknown server error'

@@ -1,13 +1,43 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Sparkles, Brain, Accessibility, Droplets, Wind, Bookmark, ChevronLeft, Loader2, CheckCircle2 } from 'lucide-react';
+import {
+    Sparkles, Brain, Accessibility, Droplets, Wind, Bookmark,
+    ChevronLeft, Loader2, CheckCircle2, Footprints, Sun,
+    Music, PenTool, ClipboardList, Eye, Clock, Moon, RefreshCcw, Send,
+    TrendingUp, History as HistoryIcon
+} from 'lucide-react';
 import Header from '../components/Header';
+import BottomMenu from '../components/BottomMenu';
 import { generateAIInsights, AIInsight } from '../services/aiService';
 import { saveScanToHistory } from '../services/historyService';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
+
+const ICON_MAP: Record<string, React.ReactNode> = {
+    walk: <Footprints className="w-6 h-6" />,
+    stretch: <Accessibility className="w-6 h-6" />,
+    water: <Droplets className="w-6 h-6" />,
+    breath: <Wind className="w-6 h-6" />,
+    sun: <Sun className="w-6 h-6" />,
+    music: <Music className="w-6 h-6" />,
+    pen: <PenTool className="w-6 h-6" />,
+    list: <ClipboardList className="w-6 h-6" />,
+    eye: <Eye className="w-6 h-6" />,
+    clock: <Clock className="w-6 h-6" />,
+    moon: <Moon className="w-6 h-6" />,
+    refresh: <RefreshCcw className="w-6 h-6" />,
+    // Aliases to be safe
+    walking: <Footprints className="w-6 h-6" />,
+    breathing: <Wind className="w-6 h-6" />,
+    hydration: <Droplets className="w-6 h-6" />,
+    default: <Sparkles className="w-6 h-6" />
+};
 
 const WellnessInsights: React.FC = () => {
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
     const location = useLocation();
+    const { user } = useAuth();
     const scanData = location.state?.scanData;
 
     const [loading, setLoading] = React.useState(true);
@@ -16,7 +46,7 @@ const WellnessInsights: React.FC = () => {
     const [isSaved, setIsSaved] = React.useState(false);
 
     const handleSaveToHistory = async () => {
-        if (!scanData || !insight) return;
+        if (!scanData || !insight || isSaved) return;
 
         await saveScanToHistory({
             vibe: scanData.vibe,
@@ -31,15 +61,21 @@ const WellnessInsights: React.FC = () => {
         });
 
         setIsSaved(true);
-        setTimeout(() => {
-            navigate('/history');
-        }, 1500);
     };
+
+    React.useEffect(() => {
+        if (insight && !isSaved && !loading) {
+            handleSaveToHistory();
+        }
+    }, [insight, isSaved, loading]);
 
     React.useEffect(() => {
         const fetchInsights = async () => {
             if (scanData) {
-                const results = await generateAIInsights(scanData);
+                const results = await generateAIInsights({
+                    ...scanData,
+                    language: i18n.language
+                });
                 setInsight(results);
                 setLoading(false);
             } else {
@@ -62,7 +98,7 @@ const WellnessInsights: React.FC = () => {
                         <div className="absolute inset-0 bg-black/40" />
                     </div>
 
-                    <Header title="KOZENDO" transparent dark />
+                    <Header title={t('common.app_name')} transparent dark />
 
                     <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-8 relative z-10">
                         <div className="relative">
@@ -72,14 +108,16 @@ const WellnessInsights: React.FC = () => {
                             </div>
                         </div>
                         <div className="space-y-3">
-                            <h2 className="text-3xl font-light tracking-tight text-white">Personalizing Your <span className="font-bold">Flow</span></h2>
+                            <h2 className="text-3xl font-light tracking-tight text-white">
+                                {t('insights.loading.title_main')} <span className="font-bold">{t('insights.loading.title_sub')}</span>
+                            </h2>
                             <div className="flex items-center justify-center gap-2 text-[#13ec13] font-bold uppercase tracking-[0.2em] text-[10px]">
                                 <Loader2 className="w-4 h-4 animate-spin" />
-                                <span>AI is thinking...</span>
+                                <span>{t('insights.loading.thinking')}</span>
                             </div>
                         </div>
                         <p className="text-white/40 text-xs leading-relaxed px-4 max-w-sm">
-                            Analyzing your scan results to create a unique micro-routine just for you.
+                            {t('insights.loading.analyzing')}
                         </p>
                     </div>
                 </main>
@@ -98,14 +136,14 @@ const WellnessInsights: React.FC = () => {
                             className="w-full h-full object-cover brightness-[0.5]"
                         />
                     </div>
-                    <Header title="KOZENDO" transparent dark />
+                    <Header title={t('common.app_name')} transparent dark />
                     <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-6 relative z-10">
-                        <p className="text-white/60">No scan data found. Please complete a scan first.</p>
+                        <p className="text-white/60">{t('insights.no_data.message')}</p>
                         <button
                             onClick={() => navigate('/scan')}
                             className="bg-[#13ec13] text-slate-900 font-bold px-8 py-4 rounded-2xl active:scale-95 transition-all shadow-lg"
                         >
-                            Start Scan
+                            {t('insights.no_data.button')}
                         </button>
                     </div>
                 </main>
@@ -129,7 +167,7 @@ const WellnessInsights: React.FC = () => {
                 </div>
 
                 {/* Header Navigation */}
-                <Header title="KOZENDO" transparent dark />
+                <Header title={t('common.app_name')} transparent dark />
 
                 {/* Main Content Scroll Area */}
                 <div className="flex-1 overflow-y-auto px-6 pt-4 pb-32 relative z-10 no-scrollbar">
@@ -137,7 +175,7 @@ const WellnessInsights: React.FC = () => {
                     <div className="flex flex-col items-center mb-10 gap-2">
                         <div className="inline-flex items-center gap-2 bg-[#13ec13]/20 border border-[#13ec13]/30 px-5 py-2 rounded-full backdrop-blur-md">
                             <Sparkles className="text-[#13ec13] w-4 h-4" />
-                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#13ec13]">Analysis Complete</span>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#13ec13]">{t('insights.status.complete')}</span>
                         </div>
 
                         {insight.debugError && (
@@ -156,8 +194,8 @@ const WellnessInsights: React.FC = () => {
                                 <Brain className="text-slate-900 w-8 h-8" />
                             </div>
                             <div>
-                                <h1 className="text-2xl font-light tracking-tight text-white">Your Daily <span className="font-bold">Insight</span></h1>
-                                <p className="text-[10px] uppercase font-bold tracking-widest text-white/30">AI Mindful Assistant</p>
+                                <h1 className="text-2xl font-light tracking-tight text-white">{t('insights.title_main')} <span className="font-bold">{t('insights.title_sub')}</span></h1>
+                                <p className="text-[10px] uppercase font-bold tracking-widest text-white/30">{t('insights.subtitle')}</p>
                             </div>
                         </div>
 
@@ -172,7 +210,7 @@ const WellnessInsights: React.FC = () => {
                         <div className="space-y-4 mb-10">
                             <div className="flex items-center gap-2 mb-4">
                                 <div className="h-px flex-1 bg-white/10" />
-                                <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#13ec13]">Micro-Actions</h3>
+                                <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#13ec13]">{t('insights.sections.micro_actions')}</h3>
                                 <div className="h-px flex-1 bg-white/10" />
                             </div>
 
@@ -190,9 +228,7 @@ const WellnessInsights: React.FC = () => {
                                             ? 'bg-[#13ec13] text-slate-900 shadow-[0_0_15px_rgba(19,236,19,0.4)]'
                                             : 'bg-white/10 text-[#13ec13]'
                                             }`}>
-                                            {action.icon === 'accessibility_new' && <Accessibility className="w-6 h-6" />}
-                                            {action.icon === 'water_drop' && <Droplets className="w-6 h-6" />}
-                                            {action.icon === 'air' && <Wind className="w-6 h-6" />}
+                                            {ICON_MAP[action.icon.toLowerCase().trim()] || ICON_MAP.default}
                                         </div>
                                         <div className="flex-1">
                                             <span className={`font-bold text-sm transition-colors ${activeActionId === action.id ? 'text-white' : 'text-white/80'}`}>
@@ -225,28 +261,27 @@ const WellnessInsights: React.FC = () => {
                 </div>
 
                 {/* Sticky Footer Actions */}
-                <div className="absolute bottom-0 left-0 w-full px-6 pb-10 pt-4 bg-gradient-to-t from-black/20 via-black/10 to-transparent flex flex-col gap-3 z-20">
+                <div className="absolute bottom-20 left-0 w-full px-6 pb-4 pt-4 bg-gradient-to-t from-black/20 via-black/10 to-transparent flex flex-col gap-3 z-20">
+                    {!user && (
+                        <button
+                            onClick={() => navigate('/login', { state: { from: location, scanData } })}
+                            className="w-full font-bold py-4 rounded-2xl flex items-center justify-center gap-3 bg-white/10 text-white backdrop-blur-md border border-white/20 shadow-xl transition-all active:scale-95 hover:bg-white/20"
+                        >
+                            <Send className="w-5 h-5 text-[#13ec13]" />
+                            <span>{t('insights.actions.share_community')}</span>
+                        </button>
+                    )}
+
                     <button
-                        onClick={handleSaveToHistory}
-                        disabled={isSaved}
-                        className={`w-full font-bold py-4 rounded-2xl flex items-center justify-center gap-3 shadow-2xl transition-all active:scale-95 ${isSaved
-                            ? 'bg-white/10 text-white/40 cursor-default border border-white/10'
-                            : 'bg-[#13ec13] text-slate-900 shadow-[#13ec13]/30 hover:shadow-[#13ec13]/50'
-                            }`}
+                        onClick={() => navigate('/history')}
+                        className="w-full font-bold py-4 rounded-2xl flex items-center justify-center gap-3 bg-[#13ec13] text-slate-900 shadow-2xl shadow-[#13ec13]/30 hover:shadow-[#13ec13]/50 transition-all active:scale-95"
                     >
-                        {isSaved ? (
-                            <>
-                                <CheckCircle2 className="w-5 h-5 text-[#13ec13]" />
-                                <span>Journey Recorded</span>
-                            </>
-                        ) : (
-                            <>
-                                <Bookmark className="w-5 h-5" />
-                                <span>Save Entry</span>
-                            </>
-                        )}
+                        <TrendingUp className="w-5 h-5" />
+                        <span>{t('insights.actions.view_history_trend')}</span>
                     </button>
                 </div>
+
+                <BottomMenu />
             </main>
         </div>
     );

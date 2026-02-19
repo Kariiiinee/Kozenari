@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import BottomMenu from '../components/BottomMenu';
 import { getScanHistory, clearHistory, ScanHistoryItem } from '../services/historyService';
 import { Clock, Calendar, Trash2 } from 'lucide-react';
 import VibeSummary from '../components/VibeSummary';
 import CalendarView from '../components/CalendarView';
 import VibeTrendGraph from '../components/VibeTrendGraph';
 import ScanDetailModal from '../components/ScanDetailModal';
+import { useTranslation } from 'react-i18next';
 
 const WellnessHistory: React.FC = () => {
     const [history, setHistory] = useState<ScanHistoryItem[]>([]);
     const [selectedScan, setSelectedScan] = useState<ScanHistoryItem | null>(null);
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         const loadHistory = async () => {
@@ -20,7 +23,7 @@ const WellnessHistory: React.FC = () => {
     }, []);
 
     const handleClear = async () => {
-        if (confirm('Are you sure you want to clear your history?')) {
+        if (confirm(t('history.clear_confirm'))) {
             await clearHistory();
             setHistory([]);
         }
@@ -40,19 +43,21 @@ const WellnessHistory: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
                 </div>
 
-                <Header title="KOZENDO" transparent dark />
+                <Header title={t('common.app_name')} transparent dark />
 
                 <div className="flex-1 overflow-y-auto pb-32 no-scrollbar space-y-6 relative z-10 px-6">
                     {/* Page Title */}
                     <div className="pt-4 text-center">
-                        <h2 className="text-3xl font-light tracking-tight text-white mb-1">Wellness <span className="font-bold">History</span></h2>
-                        <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">Your mindfulness journey</p>
+                        <h2 className="text-3xl font-light tracking-tight text-white mb-1">
+                            {t('history.title_main')} <span className="font-bold">{t('history.title_sub')}</span>
+                        </h2>
+                        <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] font-bold">{t('history.subtitle')}</p>
                     </div>
 
                     {/* Vibe Summary Stats Card */}
                     <div className="bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/10 p-2 overflow-hidden shadow-2xl">
                         <div className="pt-4 px-4">
-                            <h3 className="text-[10px] font-bold text-[#13ec13] uppercase tracking-wider mb-3">Vibe distribution</h3>
+                            <h3 className="text-[10px] font-bold text-[#13ec13] uppercase tracking-wider mb-3">{t('history.vibe_distribution')}</h3>
                         </div>
                         <VibeSummary history={history} />
                     </div>
@@ -60,7 +65,7 @@ const WellnessHistory: React.FC = () => {
                     {/* Trend Graph Card */}
                     <div className="bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/10 p-6 shadow-2xl">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-[10px] font-bold text-[#13ec13] uppercase tracking-wider">Mood Trends</h3>
+                            <h3 className="text-[10px] font-bold text-[#13ec13] uppercase tracking-wider">{t('history.mood_trends')}</h3>
                         </div>
                         <VibeTrendGraph history={history} />
                     </div>
@@ -68,21 +73,23 @@ const WellnessHistory: React.FC = () => {
                     {/* Calendar View Card */}
                     <div className="bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/10 p-2 shadow-2xl overflow-hidden">
                         <div className="pt-4 px-4">
-                            <h3 className="text-[10px] font-bold text-[#13ec13] uppercase tracking-wider mb-2">Completion Log</h3>
+                            <h3 className="text-[10px] font-bold text-[#13ec13] uppercase tracking-wider mb-2">{t('history.completion_log')}</h3>
                         </div>
                         <CalendarView history={history} />
                     </div>
 
                     <div className="space-y-4 pt-4">
                         <div className="flex items-center justify-between px-2">
-                            <h3 className="font-bold text-white text-sm">Recent Journey Entries</h3>
-                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">{history.length} Scans</span>
+                            <h3 className="font-bold text-white text-sm">{t('history.recent_entries')}</h3>
+                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                                {t('history.scans_count', { count: history.length })}
+                            </span>
                         </div>
 
                         {history.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-48 text-white/20 bg-white/5 rounded-[2rem] border border-white/10 border-dashed">
                                 <Clock className="w-10 h-10 mb-3 opacity-20" />
-                                <p className="text-sm font-medium">No history yet.</p>
+                                <p className="text-sm font-medium">{t('history.no_history')}</p>
                             </div>
                         ) : (
                             <div className="space-y-4">
@@ -95,9 +102,9 @@ const WellnessHistory: React.FC = () => {
                                         <div className="flex justify-between items-start mb-3">
                                             <div className="flex items-center gap-2 text-white/40 text-[10px] font-bold tracking-wider uppercase">
                                                 <Calendar className="w-3.5 h-3.5" />
-                                                {new Date(item.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                {new Date(item.timestamp).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 <span className="text-white/10">•</span>
-                                                {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                {new Date(item.timestamp).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' })}
                                             </div>
                                             {item.vibe && (
                                                 <span className="px-3 py-1 bg-[#13ec13]/20 text-[#13ec13] text-[9px] font-black rounded-full uppercase tracking-[0.1em] border border-[#13ec13]/20">
@@ -111,12 +118,12 @@ const WellnessHistory: React.FC = () => {
                                         <div className="grid grid-cols-2 gap-3 text-[11px] text-white/40 mt-4 pt-4 border-t border-white/5">
                                             <div className="flex items-center gap-1.5">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-[#13ec13] opacity-40" />
-                                                <span className="font-bold text-white/50">Body:</span>
+                                                <span className="font-bold text-white/50">{t('common.body')}:</span>
                                                 <span className="truncate">{item.body}</span>
                                             </div>
                                             <div className="flex items-center gap-1.5">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-[#13ec13] opacity-40" />
-                                                <span className="font-bold text-white/50">Heart:</span>
+                                                <span className="font-bold text-white/50">{t('common.heart')}:</span>
                                                 <span className="truncate">{item.heart}</span>
                                             </div>
                                         </div>
@@ -133,7 +140,7 @@ const WellnessHistory: React.FC = () => {
                                 className="w-full flex items-center justify-center gap-2 text-white/30 text-[10px] font-bold uppercase tracking-widest hover:text-red-400 py-4 transition-colors"
                             >
                                 <Trash2 className="w-4 h-4" />
-                                Clear History
+                                {t('history.clear_history')}
                             </button>
                         </div>
                     )}
@@ -145,6 +152,8 @@ const WellnessHistory: React.FC = () => {
                         onClose={() => setSelectedScan(null)}
                     />
                 )}
+
+                <BottomMenu />
             </main>
         </div>
     );

@@ -2,14 +2,18 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sun, Droplets, Wind, ArrowRight, CheckCircle2, Activity } from 'lucide-react';
 import Header from '../components/Header';
+import BottomMenu from '../components/BottomMenu';
+import { useTranslation } from 'react-i18next';
 
 const MorningRoutine: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
+
     const [steps, setSteps] = React.useState([
-        { id: 1, text: 'Hydration: Drink a glass of water', icon: <Droplets className="w-5 h-5" />, completed: false },
-        { id: 2, text: 'Light: 5 minutes of sunlight', icon: <Sun className="w-5 h-5" />, completed: false },
-        { id: 3, text: 'Movement: 2-minute light stretch', icon: <Activity className="w-5 h-5" />, completed: false },
-        { id: 4, text: 'Breath: 3 deep conscious breaths', icon: <Wind className="w-5 h-5" />, completed: false },
+        { id: 1, key: 'hydration', icon: <Droplets className="w-5 h-5" />, completed: false },
+        { id: 2, key: 'light', icon: <Sun className="w-5 h-5" />, completed: false },
+        { id: 3, key: 'movement', icon: <Activity className="w-5 h-5" />, completed: false },
+        { id: 4, key: 'breath', icon: <Wind className="w-5 h-5" />, completed: false },
     ]);
     const [showSuccess, setShowSuccess] = React.useState(false);
 
@@ -43,16 +47,16 @@ const MorningRoutine: React.FC = () => {
                 </div>
 
                 {/* Header */}
-                <Header title="KOZENDO" transparent dark />
+                <Header title={t('common.app_name')} transparent dark />
 
                 {/* Main Content */}
                 <main className="relative z-10 flex-1 px-6 pt-8 flex flex-col">
                     <section className="mb-8 font-sans">
-                        <p className="text-[#13ec13] font-bold tracking-widest uppercase text-xs mb-2">Morning Ritual</p>
+                        <p className="text-[#13ec13] font-bold tracking-widest uppercase text-xs mb-2">{t('routine.title_pre')} {t('routine.title_post')}</p>
                         <h1 className="text-3xl text-white font-light leading-tight">
-                            Awaken your <span className="font-bold">Senses.</span>
+                            {t('routine.headline_main')} <span className="font-bold">{t('routine.headline_sub')}</span>
                         </h1>
-                        <p className="text-white/60 text-sm mt-2">Before we dive deep, let's ground ourselves in the present moment.</p>
+                        <p className="text-white/60 text-sm mt-2">{t('routine.intro')}</p>
                     </section>
 
                     {/* Ritual Checklist */}
@@ -73,7 +77,7 @@ const MorningRoutine: React.FC = () => {
                                 <div className="flex-1">
                                     <p className={`text-sm font-medium transition-colors ${step.completed ? 'text-slate-900' : 'text-white'
                                         }`}>
-                                        {step.text}
+                                        {t(`routine.steps.${step.key}`)}
                                     </p>
                                 </div>
                             </div>
@@ -83,16 +87,16 @@ const MorningRoutine: React.FC = () => {
                     {/* Navigation Hint */}
                     <div className="mt-auto pb-32 text-center">
                         <p className="text-white/40 text-[10px] font-bold tracking-[0.2em] uppercase">
-                            {allCompleted ? 'Ready to begin' : 'Complete your ritual to proceed'}
+                            {allCompleted ? t('routine.status.ready') : t('routine.status.incomplete')}
                         </p>
                     </div>
                 </main>
 
                 {/* Bottom Action Bar */}
-                <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 pb-8 pt-4 bg-gradient-to-t from-black/20 to-transparent z-40">
+                <div className="fixed bottom-20 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-6 pb-4 pt-4 bg-gradient-to-t from-black/20 to-transparent z-40">
                     {showSuccess ? (
                         <div className="w-full bg-[#13ec13] text-slate-900 font-bold py-4 rounded-2xl shadow-lg shadow-[#13ec13]/30 flex items-center justify-center animate-in zoom-in duration-300">
-                            You're all set for a great day!
+                            {t('routine.success')}
                         </div>
                     ) : (
                         <button
@@ -103,11 +107,13 @@ const MorningRoutine: React.FC = () => {
                                 }`}
                             disabled={!allCompleted}
                         >
-                            <span>Ritual Completed</span>
+                            <span>{t('routine.completed_btn')}</span>
                             <ArrowRight className="w-5 h-5" />
                         </button>
                     )}
                 </div>
+
+                <BottomMenu />
             </div>
         </div>
     );
