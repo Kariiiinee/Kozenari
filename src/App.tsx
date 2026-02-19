@@ -22,7 +22,7 @@ function App() {
         <AuthProvider>
             <AudioProvider>
                 <Router>
-                    <RedirectHandler />
+                    {/* <RedirectHandler /> - Removing forced profile creation redirection */}
                     <Routes>
                         <Route path="/login" element={<Login />} />
                         <Route path="/profile-creation" element={
