@@ -67,7 +67,7 @@ export const generateAIInsights = async (data: ScanData): Promise<AIInsight> => 
             ? "Running on localhost: Vite dev server does not support /api serverless functions. Use 'vercel dev'."
             : (error.message || "Unknown connection error");
 
-        const isFrench = data.language === 'fr';
+        const isFrench = data.language?.startsWith('fr');
 
         // LOCAL SIMULATION FALLBACK (Localize for EN and FR)
         await new Promise(resolve => setTimeout(resolve, 2000));

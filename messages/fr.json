@@ -4,6 +4,7 @@
         "version_info": "Compagnon de pleine conscience v1.0",
         "daily_ritual": "Rituel Quotidien",
         "swipe_up": "Glissez vers le haut pour commencer le rituel",
+        "start_ritual": "Commencer le rituel",
         "greetings": {
             "morning": "Bonjour",
             "afternoon": "Bon après-midi",
@@ -23,7 +24,8 @@
         "profile": "Profil"
     },
     "home": {
-        "daily_quote_title": "Citation du jour",
+        "hero_text": "Commencez avec intention. Terminez avec réflexion. Vivez en équilibre.",
+        "daily_quote_title": "Votre Citation du jour",
         "themes": {
             "zen": "Présence • Silence • Pleine Conscience",
             "calm": "Paix • Soulagement du Stress • Douceur",

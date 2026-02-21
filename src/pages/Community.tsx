@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
 import BottomMenu from '../components/BottomMenu';
 import { getCountryDisplay } from '../constants/countries';
+import { getScanHistory } from '../services/historyService';
 
 interface Post {
     id: string;
@@ -23,37 +24,77 @@ interface Post {
 const Community: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isPosting, setIsPosting] = useState(false);
     const { t, i18n } = useTranslation();
     const { profile } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
+    const fetchPosts = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('posts')
+                .select(`
+        *,
+        profiles:user_id (
+          display_name,
+          avatar_url,
+          country
+        )
+      `)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            setPosts(data || []);
+        } catch (err) {
+            console.error('Error fetching posts:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('posts')
-                    .select(`
-            *,
-            profiles:user_id (
-              display_name,
-              avatar_url,
-              country
-            )
-          `)
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-                setPosts(data || []);
-            } catch (err) {
-                console.error('Error fetching posts:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchPosts();
     }, []);
+
+    const handlePostNewVibe = async () => {
+        if (!profile) {
+            alert(t('history.login_to_post'));
+            return;
+        }
+
+        setIsPosting(true);
+        try {
+            const history = await getScanHistory();
+            if (history.length === 0) {
+                alert(t('history.no_history'));
+                navigate('/scan');
+                return;
+            }
+
+            const item = history[0]; // get the latest scan (sorted desc by timestamp in service)
+
+            const { error } = await supabase.from('posts').insert({
+                user_id: profile.id,
+                vibe: item.vibe,
+                reflection: item.reflection,
+                body: item.body || '',
+                heart: item.heart || '',
+                environment: item.environment || '',
+                breath_action: item.breathAction || '',
+                created_at: new Date().toISOString()
+            });
+
+            if (error) throw error;
+
+            await fetchPosts(); // Refresh feed
+        } catch (err) {
+            console.error('Error posting new vibe:', err);
+            alert(t('history.post_error'));
+        } finally {
+            setIsPosting(false);
+        }
+    };
 
     const getVibeEmoji = (vibeId: string) => {
         const vibes: Record<string, string> = {
@@ -155,11 +196,16 @@ const Community: React.FC = () => {
                             </div>
                         </div>
                         <button
-                            onClick={() => navigate('/scan')}
-                            className="w-full mt-3 flex items-center justify-center gap-2 text-primary hover:text-white transition-all active:scale-95 py-2 rounded-lg group"
+                            onClick={handlePostNewVibe}
+                            disabled={isPosting}
+                            className={`w-full mt-3 flex items-center justify-center gap-2 text-primary hover:text-white transition-all active:scale-95 py-2 rounded-lg group ${isPosting ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
-                            <span className="material-icons-outlined text-lg group-hover:rotate-12 transition-transform duration-300">spa</span>
-                            <span className="text-sm font-semibold tracking-wide uppercase">{t('community.post_new')}</span>
+                            <span className={`material-icons-outlined text-lg transition-transform duration-300 ${isPosting ? 'animate-spin' : 'group-hover:rotate-12'}`}>
+                                {isPosting ? 'sync' : 'spa'}
+                            </span>
+                            <span className="text-sm font-semibold tracking-wide uppercase">
+                                {isPosting ? t('scan.processing') : t('community.post_new')}
+                            </span>
                         </button>
                     </div>
 

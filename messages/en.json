@@ -4,6 +4,7 @@
         "version_info": "Mindfulness Companion v1.0",
         "daily_ritual": "Daily Ritual",
         "swipe_up": "Swipe up to start ritual",
+        "start_ritual": "Start Ritual",
         "greetings": {
             "morning": "Good morning",
             "afternoon": "Good afternoon",
@@ -23,7 +24,8 @@
         "profile": "Profile"
     },
     "home": {
-        "daily_quote_title": "Daily quote",
+        "hero_text": "Start with intention. End with reflection. Live in balance.",
+        "daily_quote_title": "Your Daily Quote",
         "themes": {
             "zen": "Presence • Stillness • Mindfulness",
             "calm": "Peace • Stress Relief • Gentleness",

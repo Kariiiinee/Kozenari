@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowUp, Quote } from 'lucide-react';
+import { Quote } from 'lucide-react';
 import { mockData } from '../data/mockData';
 import Header from '../components/Header';
 import BottomMenu from '../components/BottomMenu';
@@ -64,7 +64,14 @@ const Home: React.FC = () => {
             <Header transparent dark />
 
             {/* Main Content Area */}
-            <div className="relative z-10 px-6 pt-12 flex flex-col h-[calc(100%-120px)] overflow-y-auto no-scrollbar pb-24">
+            <div className="relative z-10 px-6 pt-6 flex flex-col h-[calc(100%-80px)] overflow-y-auto no-scrollbar pb-32">
+                {/* Hero Section */}
+                <section className="mb-8 animate-in fade-in slide-in-from-bottom-2 duration-1000 ease-out">
+                    <p className="text-m text-white/80 font-serif italic leading-relaxed tracking-wide">
+                        {t('home.hero_text')}
+                    </p>
+                </section>
+
                 {/* Greeting Section */}
                 <section className="mb-12">
                     <p className="text-[#13ec13] font-semibold tracking-wide uppercase text-xs mb-1">{t('common.daily_ritual')}</p>
@@ -115,13 +122,14 @@ const Home: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Swipe Up Hint */}
-                <div
-                    className="mt-auto flex flex-col items-center gap-2 pb-8 opacity-60 cursor-pointer"
-                    onClick={() => navigate(targetPath)}
-                >
-                    <p className="text-[10px] font-bold tracking-[0.2em] text-white uppercase">{t('common.swipe_up')}</p>
-                    <ArrowUp className="text-white w-4 h-4 animate-bounce" />
+                {/* Start Ritual Button */}
+                <div className="mt-8 mb-6 pb-20 flex justify-center w-full relative z-10 flex-shrink-0">
+                    <button
+                        onClick={() => navigate(targetPath)}
+                        className="bg-[#13ec13] hover:bg-[#13ec13]/90 text-black px-8 py-4 rounded-full font-bold tracking-[0.1em] uppercase text-[10px] sm:text-xs transition-all active:scale-95 flex items-center justify-center shadow-[0_0_20px_rgba(19,236,19,0.3)] group w-64 max-w-full"
+                    >
+                        {t('common.start_ritual')}
+                    </button>
                 </div>
             </div>
 
